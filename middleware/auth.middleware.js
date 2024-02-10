@@ -48,6 +48,43 @@ const authMiddleware = {
             res.json(config.responseGenerator(true, "error", error));
         }
     }
+
+    // Register: async (req, res) => {
+
+    //Verify over here 
+    // abhi jwt tokens use nahi kiye hain
+    // JWT tokens can be used to verify the user
+
+    // verify the jwt token
+    // if the token is verified then the user is verified
+    // if the token is not verified then the user is not verified
+
+    // This will be used to register the user
+    // register()
+
+
+
+
+    // verify()
+
+
+
+
+    // Role based logins can be implemented here
+
+    // isAdmin()
+
+
+
+
+    // isStudent()
+
+
+
+    // isTeacher()
+
+
+
 }
 
 module.exports = authMiddleware;
