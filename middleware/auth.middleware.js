@@ -1,10 +1,11 @@
 
 // All the imports will be done here
-
 const db = require('./../constants/db.js');
 const bycrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const config = require('./../constants/config.js');
 const loginSQl = require('../constants/sql.js');
+const loginModel = require('../models/login.model.js');
 
 
 // This is the middleware 
@@ -16,9 +17,7 @@ const loginSQl = require('../constants/sql.js');
 const authMiddleware = {
     getAllLogins: async (req, res) => {
         try {
-            const connection = await db.getConnection();
-            const [rows, fields] = await connection.query(loginSQl.selectAll);
-            connection.release();
+            const rows = await loginModel.getAllLogins();
             res.json(config.responseGenerator(false, rows, null));
         } catch (error) {
             res.json(config.responseGenerator(true, "error", error));
@@ -28,16 +27,11 @@ const authMiddleware = {
     //this will tell if the user is login or not
     login: async (req, res) => {
         try {
-            console.log(req);
-            // Getting the connection from the pool
-            const connection = await db.getConnection();
+            // getting data from the request
+            const username = req.body.username;
+            const password = req.body.password;
 
-            // Getting the rows from the database through prepared statement
-            const [rows, fields] = await connection.query(loginSQl.selectLogin, [req.body.username, req.body.password]);
-
-            // Releasing the connection
-            connection.release();
-
+            const rows = await loginModel.getLogin(username, password);
 
             if (rows.length > 0) {
                 res.json(config.responseGenerator(false, rows, "Login Success"));
