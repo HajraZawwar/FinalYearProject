@@ -7,7 +7,6 @@ const config = require('./../constants/config.js');
 const loginSQl = require('../constants/sql.js');
 const loginModel = require('../models/login.model.js');
 
-
 // This is the middleware 
 // This middleware is used to get all the logins
 // Middleware  means these functions are called before the request is passed to the route
@@ -31,17 +30,18 @@ const authMiddleware = {
             const username = req.body.username;
             const password = req.body.password;
 
-            const rows = await loginModel.getLogin(username, password);
+            const user = await loginModel.getLogin(username, password);
 
             if (rows.length > 0) {
-                res.json(config.responseGenerator(false, rows, "Login Success"));
+                const token = jwt.sign({ username: user.username, userType: user.role }, config.JWT_SECRET);
+                res.json(config.responseGenerator(false, { token, user }, "Login Success"));
             } else {
                 res.json(config.responseGenerator(true, null, "Login Failed"));
             }
         } catch (error) {
             res.json(config.responseGenerator(true, "error", error));
         }
-    }
+    },
 
     // Register: async (req, res) => {
 
@@ -60,28 +60,57 @@ const authMiddleware = {
 
 
     // verify()
+    // Middleware to verify the jwt token
 
+    verifyToken: (req, res, next) => {
+        const token = req.headers.authorization;
 
+        if (!token) {
+            return res.json(config.responseGenerator(true, null, "Token not provided"));
+        }
 
+        jwt.verify(token, config.JWT_SECRET, (err, decoded) => {
+            if (err) {
+                return res.json(config.responseGenerator(true, null, "Token verification failed"));
+            }
+
+            req.user = decoded;
+            next();
+        });
+    },
 
     // Role based logins can be implemented here
 
     // isAdmin()
+    // Middleware to check if the user has admin role
+    isAdmin: (req, res, next) => {
+        if (req.user && req.user.role === 'admin') {
+            next();
+        } else {
+            return res.json(config.responseGenerator(true, null, "Access denied. Admin privileges required."));
+        }
+    },
 
+    //isStudent()
+    // Middleware to check if the user has student role
+    isStudent: (req, res, next) => {
+        if (req.user && req.user.role === 'student') {
+            next();
+        } else {
+            return res.json(config.responseGenerator(true, null, "Access denied. Student privileges required."));
+        }
+    },
 
-
-
-    // isStudent()
-
-
-
-    // isTeacher()
-
-
+    //isTeacher()
+    // Middleware to check if the user has teacher role
+    isTeacher: (req, res, next) => {
+        if (req.user && req.user.role === 'teacher') {
+            next();
+        } else {
+            return res.json(config.responseGenerator(true, null, "Access denied. Teacher privileges required."));
+        }
+    }
 
 }
 
 module.exports = authMiddleware;
-
-
-
