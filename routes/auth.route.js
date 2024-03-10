@@ -2,12 +2,11 @@ const requireAuth = require('../middleware/auth.middleware.js');
 const express = require('express');
 const router = express.Router();
 
+router.post('/register', requireAuth.register);
 router.post('/login', requireAuth.login);
-router.get('/profile', requireAuth.verifyToken, (req, res) => {
-    res.json(config.responseGenerator(false, req.user, "Token verified"));
-});
-
-router.post('/login', requireAuth.login);
+// router.get('/profile', requireAuth.verifyToken, (req, res) => {
+//     res.json(config.responseGenerator(false, req.user, "Token verified"));
+// });
 
 // Route accessible only to users with admin role
 router.get('/admin', requireAuth.verifyToken, requireAuth.isAdmin, (req, res) => {

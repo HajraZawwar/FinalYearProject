@@ -36,6 +36,30 @@ const loginModel = {
         } catch (error) {
             return error;
         }
+    },
+
+    getUserByUsername: async (username) => {
+        try {
+            const connection = await db.getConnection();
+            const [rows, fields] = await connection.query(loginSQl.selectUserByUsername, [username]);
+            connection.release();
+            return rows[0]; // Assuming there is only one user with a given username
+        } catch (error) {
+            return error;
+        }
+    },
+
+    //Method to register a new user
+    registerUser: async (username, password, role) => {
+        try {
+            const connection = await db.getConnection();
+            const [result] = await connection.query(loginSQl.insertUser, [username, password, role]);
+            connection.release();
+
+            return result.insertId; // Return the ID of the newly inserted user
+        } catch (error) {
+            return error;
+        }
     }
 
 }

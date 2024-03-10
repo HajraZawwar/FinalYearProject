@@ -55,9 +55,29 @@ const authMiddleware = {
 
     // This will be used to register the user
     // register()
+    register: async (req, res) => {
+        try {
+            const username = req.body.username;
+            const password = req.body.password;
+            const userType = req.body.role; // Assuming role is provided in the request body
 
+            // Check if the username is already taken
+            const existingUser = await loginModel.getUserByUsername(username);
+            if (existingUser) {
+                return res.json(config.responseGenerator(true, null, "Username is already taken"));
+            }
 
+            // Hash the password before storing it
+            const hashedPassword = await bcrypt.hash(password, 10);
 
+            // Register the new user
+            const userId = await loginModel.registerUser(username, hashedPassword, role);
+
+            res.json(config.responseGenerator(false, { userId, username, role }, "Registration successful"));
+        } catch (error) {
+            res.json(config.responseGenerator(true, null, error.message));
+        }
+    },
 
     // verify()
     // Middleware to verify the jwt token
