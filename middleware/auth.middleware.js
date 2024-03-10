@@ -32,8 +32,8 @@ const authMiddleware = {
 
             const user = await loginModel.getLogin(username, password);
 
-            if (rows.length > 0) {
-                const token = jwt.sign({ username: user.username, userType: user.role }, config.JWT_SECRET);
+            if (user.length > 0) {
+                const token = jwt.sign({ username: user.username, role: user.role }, config.JWT_SECRET);
                 res.json(config.responseGenerator(false, { token, user }, "Login Success"));
             } else {
                 res.json(config.responseGenerator(true, null, "Login Failed"));
@@ -59,7 +59,7 @@ const authMiddleware = {
         try {
             const username = req.body.username;
             const password = req.body.password;
-            const userType = req.body.role; // Assuming role is provided in the request body
+            const role = req.body.role; // Assuming role is provided in the request body
 
             // Check if the username is already taken
             const existingUser = await loginModel.getUserByUsername(username);
