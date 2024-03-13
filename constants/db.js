@@ -16,4 +16,16 @@ module.exports = {
     getConnection: async () => {
         return await pool.getConnection();
     }
+    ,
+    executeQuery: async (query, params) => {
+        const connection = await pool.getConnection();
+        try {
+            const [rows, fields] = await connection.execute(query, params);
+            return  [rows, fields];
+        } catch (error) {
+            throw error;
+        } finally {
+            connection.release();
+        }
+    }
 }
