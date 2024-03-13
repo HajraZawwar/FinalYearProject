@@ -5,5 +5,25 @@
 const db = require('./../constants/db.js');
 const config = require('./../constants/config.js');
 const loginSQl = require('../constants/sql.js');
-const loginModel = require('../models/login.model.js');
+const courseModel = require('../models/course.model.js');
+
+
+const adminController ={
+    getAllCourses : async (req,res) => {
+        try{
+
+            const [data, fields] = await courseModel.getAllCourses();
+            res.json(config.responseGenerator(false, data,""));
+        }
+
+        catch(error)
+        {
+            res.json(config.responseGenerator(true, null,error))
+        }
+
+    }
+}
+
+module.exports = adminController;
+
 

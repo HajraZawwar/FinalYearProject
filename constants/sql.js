@@ -5,5 +5,9 @@ const loginSQl ={
     insertUser: 'INSERT INTO login (username, password, role) VALUES (?, ?, ?)',
 }
 
+const courseSQl ={
+    selectAll: `SELECT * FROM course`
+}
 
-module.exports = loginSQl;
+
+module.exports = {loginSQl, courseSQl};
