@@ -1,16 +1,16 @@
 const db = require('../constants/db');
-const loginSQl = require('../constants/sql');
+const sql = require('../constants/sql');
 const config = require('../constants/config');
 
 
 const loginModel = {
     getAllLogins: async () => {
         try {
-          
+
             // getting the data from the database
-            const [rows, fields] = await db.executeQuery(loginSQl.selectAll, null);
-           
-           return rows;
+            const [rows, fields] = await db.executeQuery(sql.loginSQl.selectAll, null);
+
+            return rows;
 
         } catch (error) {
             console.log(error);
@@ -23,7 +23,7 @@ const loginModel = {
 
             //getting the data from the database
             // Exevcute the query
-            const[rows,fields] = await db.executeQuery(loginSQl.selectLogin, [username, password]);
+            const [rows, fields] = await db.executeQuery(sql.loginSQl.selectLogin, [username, password]);
 
             //returning the data
             return rows;
@@ -35,8 +35,9 @@ const loginModel = {
     getUserByUsername: async (username) => {
         try {
             const connection = await db.getConnection();
-            const [rows, fields] = await connection.query(loginSQl.selectUserByUsername, [username]);
+            const [rows, fields] = await connection.query(sql.loginSQl.selectUserByUsername, [username]);
             connection.release();
+            // console.log(rows);
             return rows[0]; // Assuming there is only one user with a given username
         } catch (error) {
             return error;
@@ -47,7 +48,7 @@ const loginModel = {
     registerUser: async (username, password, role) => {
         try {
             const connection = await db.getConnection();
-            const [result] = await connection.query(loginSQl.insertUser, [username, password, role]);
+            const [result] = await connection.query(sql.loginSQl.insertUser, [username, password, role]);
             connection.release();
 
             return result.insertId; // Return the ID of the newly inserted user
