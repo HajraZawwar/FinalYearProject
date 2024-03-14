@@ -32,7 +32,9 @@ const authMiddleware = {
 
             const user = await loginModel.getLogin(username, password);
 
-            if (user.length > 0) {
+
+            if (rows.length > 0) {
+
                 const token = jwt.sign({ username: user.username, role: user.role }, config.JWT_SECRET);
                 res.json(config.responseGenerator(false, { token, user }, "Login Success"));
             } else {

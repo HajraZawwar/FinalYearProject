@@ -6,30 +6,24 @@ const config = require('../constants/config');
 const loginModel = {
     getAllLogins: async () => {
         try {
-            // getting the connection
-            const connection = await db.getConnection();
+          
             // getting the data from the database
-            const [rows, fields] = await connection.query(loginSQl.selectAll);
-            // releasing the connection
-            connection.release();
-            // returning the data
-            res.json(config.responseGenerator(false, rows, null));
+            const [rows, fields] = await db.executeQuery(loginSQl.selectAll, null);
+           
+           return rows;
+
         } catch (error) {
-            res.json(config.responseGenerator(true, "error", error));
+            console.log(error);
+            res.json(config.responseGenerator(true, "", error));
         }
     },
 
     getLogin: async (username, password) => {
         try {
 
-            //getting the connection
-            const connection = await db.getConnection();
-
             //getting the data from the database
-            const [rows, fields] = await connection.query(loginSQl.selectLogin, [username, password]);
-
-            //releasing the connection
-            connection.release();
+            // Exevcute the query
+            const[rows,fields] = await db.executeQuery(loginSQl.selectLogin, [username, password]);
 
             //returning the data
             return rows;
