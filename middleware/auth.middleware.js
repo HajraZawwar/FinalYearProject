@@ -32,7 +32,9 @@ const authMiddleware = {
 
             const user = await loginModel.getLogin(username, password);
 
+
             if (rows.length > 0) {
+
                 const token = jwt.sign({ username: user.username, role: user.role }, config.JWT_SECRET);
                 res.json(config.responseGenerator(false, { token, user }, "Login Success"));
             } else {
@@ -68,7 +70,7 @@ const authMiddleware = {
             }
 
             // Hash the password before storing it
-            const hashedPassword = await bcrypt.hash(password, 10);
+            const hashedPassword = await bycrypt.hash(password, 10);
 
             // Register the new user
             const userId = await loginModel.registerUser(username, hashedPassword, role);
