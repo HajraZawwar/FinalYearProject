@@ -18,6 +18,8 @@ app.get('/', (req, res) => {
 //This is for login signup and other things
 app.use('/auth', authRoute);
 
+// Tafjsdbfjibsdkjfbkbj
+
 
 app.listen(config.expressPort, () => {
     console.log("Server is running on port " + config.expressPort);
