@@ -11,6 +11,8 @@ const courseSQl ={
 
 
 const courseQueries = {
+    selectAll: 
+        `SELECT * FROM Courses`,
     addCourse: 
         `INSERT INTO Courses (course_name, course_description, course_credit)
         VALUES (?, ?, ?)`,

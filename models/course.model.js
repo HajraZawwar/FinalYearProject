@@ -1,11 +1,11 @@
 const db = require('../constants/db');
-const courseQueries = require('../constants/courseQueries');
+const query = require('../constants/sql');
 const config = require('../constants/config');
 
 const courseModel = {
-    getAllCourses: async function() {
+    getAllCourses: async function () {
         try {
-            const [rows, fields] = await db.executeQuery(courseQueries.selectAll, null);
+            const [rows, fields] = await db.executeQuery(query.courseQueries.selectAll, null);
             return rows;
         } catch (error) {
             console.error(error);
@@ -13,9 +13,9 @@ const courseModel = {
         }
     },
 
-    getCourseById: async function(courseId) {
+    getCourseById: async function (courseId) {
         try {
-            const [rows, fields] = await db.executeQuery(courseQueries.selectById, [courseId]);
+            const [rows, fields] = await db.executeQuery(query.courseQueries.findCourseById, [courseId]);
             return rows;
         } catch (error) {
             console.error(error);
@@ -23,9 +23,9 @@ const courseModel = {
         }
     },
 
-    addCourse: async function(courseName, courseDescription, courseCredit) {
+    addCourse: async function (courseName, courseDescription, courseCredit) {
         try {
-            const result = await db.executeQuery(courseQueries.addCourse, [courseName, courseDescription, courseCredit]);
+            const result = await db.executeQuery(query.courseQueries.addCourse, [courseName, courseDescription, courseCredit]);
             return result;
         } catch (error) {
             console.error(error);
@@ -33,9 +33,9 @@ const courseModel = {
         }
     },
 
-    updateCourse: async function(courseName, courseDescription, courseCredit, courseId) {
+    updateCourse: async function (courseName, courseDescription, courseCredit, courseId) {
         try {
-            const result = await db.executeQuery(courseQueries.updateCourse, [courseName, courseDescription, courseCredit,courseId]);
+            const result = await db.executeQuery(query.courseQueries.updateCourse, [courseName, courseDescription, courseCredit, courseId]);
             return result;
         } catch (error) {
             console.error(error);
