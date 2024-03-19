@@ -4,8 +4,6 @@ const loginSQl ={
 }
 
 
-module.exports = loginSQl;
-
 const courseQueries = {
     addCourse: 
         `INSERT INTO Courses (course_name, course_description, course_credit)
@@ -19,6 +17,4 @@ const courseQueries = {
         WHERE course_id = ?`
 };
 
-module.exports = courseQueries;
-
-s
+module.exports = {loginSQl, courseQueries};
