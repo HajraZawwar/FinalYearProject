@@ -3,6 +3,8 @@ const app = express();
 const config = require('./constants/config.js');
 const auth = require('./middleware/auth.middleware.js');
 const authRoute = require('./routes/auth.route.js');
+const courseRoute = require('./routes/course.route.js');
+const adminController = require('./controller/admin.controller.js');
 
 
 // Middleware to parse JSON bodies
@@ -17,6 +19,9 @@ app.get('/', (req, res) => {
 
 //This is for login signup and other things
 app.use('/auth', authRoute);
+
+// Admin accessing all the courses
+app.use('/course',courseRoute)
 
 
 app.listen(config.expressPort, () => {

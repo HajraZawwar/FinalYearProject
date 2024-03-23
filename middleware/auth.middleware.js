@@ -65,8 +65,10 @@ const authMiddleware = {
 
             // Check if the username is already taken
             const existingUser = await loginModel.getUserByUsername(username);
+
             if (existingUser) {
-                return res.json(config.responseGenerator(true, null, "Username is already taken"));
+                res.json(config.responseGenerator(true, null, "Username is already taken"));
+                return;
             }
 
             // Hash the password before storing it

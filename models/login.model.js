@@ -1,16 +1,16 @@
 const db = require('../constants/db');
-const loginSQl = require('../constants/sql');
+const sql = require('../constants/sql');
 const config = require('../constants/config');
 
 
 const loginModel = {
     getAllLogins: async () => {
         try {
-          
+
             // getting the data from the database
-            const [rows, fields] = await db.executeQuery(loginSQl.selectAll, null);
-           
-           return rows;
+            const [rows, fields] = await db.executeQuery(sql.loginSQl.selectAll, null);
+
+            return rows;
 
         } catch (error) {
             console.log(error);
@@ -23,7 +23,7 @@ const loginModel = {
 
             //getting the data from the database
             // Exevcute the query
-            const[rows,fields] = await db.executeQuery(loginSQl.selectLogin, [username, password]);
+            const [rows, fields] = await db.executeQuery(sql.loginSQl.selectLogin, [username, password]);
 
             //returning the data
             return rows;
