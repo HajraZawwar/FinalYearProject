@@ -22,7 +22,8 @@ const courseQueries = {
     updateCourse: 
     `UPDATE Courses
      SET course_name = ?, course_description = ?, course_credit = ?
-        WHERE course_id = ?`
+        WHERE course_id = ?`,
+    deleteCourse: `DELETE FROM Courses WHERE course_id = ?`
 };
 
 module.exports = {loginSQl, courseQueries};
