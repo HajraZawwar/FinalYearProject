@@ -34,21 +34,17 @@ const loginModel = {
 
     getUserByUsername: async (username) => {
         try {
-            const connection = await db.getConnection();
-            const [rows, fields] = await connection.query(loginSQl.selectUserByUsername, [username]);
-            connection.release();
+            const [rows, fields] = await db.executeQuery(loginSQl.selectUserByUsername, [username]);
             return rows[0]; // Assuming there is only one user with a given username
         } catch (error) {
-            return error;
+            return error.message;
         }
     },
 
     //Method to register a new user
     registerUser: async (username, password, role) => {
         try {
-            const connection = await db.getConnection();
-            const [result] = await connection.query(loginSQl.insertUser, [username, password, role]);
-            connection.release();
+            const [result] = await db.executeQuery(loginSQl.insertUser, [username, password, role]);
 
             return result.insertId; // Return the ID of the newly inserted user
         } catch (error) {

@@ -41,7 +41,7 @@ const authMiddleware = {
                 res.json(config.responseGenerator(true, null, "Login Failed"));
             }
         } catch (error) {
-            res.json(config.responseGenerator(true, "error", error));
+            res.json(config.responseGenerator(true, "error", error.message));
         }
     },
 
@@ -77,7 +77,7 @@ const authMiddleware = {
 
             res.json(config.responseGenerator(false, { userId, username, role }, "Registration successful"));
         } catch (error) {
-            res.json(config.responseGenerator(true, null, error.message));
+            res.json(config.responseGenerator(true, "error", error.message));
         }
     },
 
@@ -85,20 +85,24 @@ const authMiddleware = {
     // Middleware to verify the jwt token
 
     verifyToken: (req, res, next) => {
-        const token = req.headers.authorization;
+        try {
+            const token = req.headers.authorization;
 
-        if (!token) {
-            return res.json(config.responseGenerator(true, null, "Token not provided"));
-        }
-
-        jwt.verify(token, config.JWT_SECRET, (err, decoded) => {
-            if (err) {
-                return res.json(config.responseGenerator(true, null, "Token verification failed"));
+            if (!token) {
+                return res.json(config.responseGenerator(true, null, "Token not provided"));
             }
 
-            req.user = decoded;
-            next();
-        });
+            jwt.verify(token, config.JWT_SECRET, (err, decoded) => {
+                if (err) {
+                    return res.json(config.responseGenerator(true, null, "Token verification failed"));
+                }
+
+                req.user = decoded;
+                next();
+            });
+        } catch (error) {
+            res.json(config.responseGenerator(true, "error", error.message));
+        }
     },
 
     // Role based logins can be implemented here
@@ -106,30 +110,43 @@ const authMiddleware = {
     // isAdmin()
     // Middleware to check if the user has admin role
     isAdmin: (req, res, next) => {
-        if (req.user && req.user.role === 'admin') {
-            next();
-        } else {
-            return res.json(config.responseGenerator(true, null, "Access denied. Admin privileges required."));
+        try {
+            if (req.user && req.user.role === 'admin') {
+                next();
+            } else {
+                return res.json(config.responseGenerator(true, null, "Access denied. Admin privileges required."));
+            }
+        } catch (error) {
+            res.json(config.responseGenerator(true, "error", error.message));
         }
     },
 
     //isStudent()
     // Middleware to check if the user has student role
     isStudent: (req, res, next) => {
-        if (req.user && req.user.role === 'student') {
-            next();
-        } else {
-            return res.json(config.responseGenerator(true, null, "Access denied. Student privileges required."));
+        try {
+            if (req.user && req.user.role === 'student') {
+                next();
+            } else {
+                return res.json(config.responseGenerator(true, null, "Access denied. Student privileges required."));
+            }
+        }
+        catch (error) {
+            res.json(config.responseGenerator(true, "error", error.message));
         }
     },
 
     //isTeacher()
     // Middleware to check if the user has teacher role
     isTeacher: (req, res, next) => {
-        if (req.user && req.user.role === 'teacher') {
-            next();
-        } else {
-            return res.json(config.responseGenerator(true, null, "Access denied. Teacher privileges required."));
+        try {
+            if (req.user && req.user.role === 'teacher') {
+                next();
+            } else {
+                return res.json(config.responseGenerator(true, null, "Access denied. Teacher privileges required."));
+            }
+        } catch (error) {
+            res.json(config.responseGenerator(true, "error", error.message));
         }
     }
 
