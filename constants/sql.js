@@ -20,5 +20,3 @@ const courseQueries = {
 };
 
 module.exports = courseQueries;
-
-s
