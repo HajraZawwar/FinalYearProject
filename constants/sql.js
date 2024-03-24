@@ -55,5 +55,22 @@ const departmentQueries = {
         `DELETE FROM Departments WHERE department_id = ?`
 };
 
+const batchQueries = {
+    selectAll: 
+        `SELECT * FROM Batches`,
+    addBatch: 
+        `INSERT INTO Batches (batch_name, start_date, end_date)
+        VALUES (?, ?, ?)`,
+    findBatchById: 
+        `SELECT * FROM Batches
+        WHERE batch_id = ?`,
+    updateBatch: 
+        `UPDATE Batches
+        SET batch_name = ?, start_date = ?, end_date = ?
+        WHERE batch_id = ?`,
+    deleteBatch: 
+        `DELETE FROM Batches WHERE batch_id = ?`
+};
 
-module.exports = {loginSQl, courseQueries , gradeQueries, departmentQueries };
+
+module.exports = {loginSQl, courseQueries , gradeQueries, departmentQueries, batchQuerie };
