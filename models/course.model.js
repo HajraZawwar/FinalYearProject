@@ -41,6 +41,16 @@ const courseModel = {
             console.error(error);
             throw error;
         }
+    },
+    
+    deleteCourse: async function (courseId) {
+        try {
+            const result = await db.executeQuery(query.courseQueries.deleteCourse, [courseId]);
+            return result;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
     }
 };
 
