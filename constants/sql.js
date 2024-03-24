@@ -89,5 +89,21 @@ const studentQueries = {
         `DELETE FROM Students WHERE student_id = ?`
 };
 
+const transcriptQueries = {
+    selectAll: 
+        `SELECT * FROM Transcripts`,
+    addTranscript: 
+        `INSERT INTO Transcripts (student_id, course_id, grade)
+        VALUES (?, ?, ?)`,
+    findTranscriptById: 
+        `SELECT * FROM Transcripts
+        WHERE transcript_id = ?`,
+    updateTranscript: 
+        `UPDATE Transcripts
+        SET student_id = ?, course_id = ?, grade = ?
+        WHERE transcript_id = ?`,
+    deleteTranscript: 
+        `DELETE FROM Transcripts WHERE transcript_id = ?`
+};
 
-module.exports = {loginSQl, courseQueries , gradeQueries, departmentQueries, batchQueries, studentQueries };
+module.exports = {loginSQl, courseQueries , gradeQueries, departmentQueries, batchQueries, studentQueries, transcriptQueries };
