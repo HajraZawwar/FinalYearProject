@@ -72,5 +72,22 @@ const batchQueries = {
         `DELETE FROM Batches WHERE batch_id = ?`
 };
 
+const studentQueries = {
+    selectAll: 
+        `SELECT * FROM Students`,
+    addStudent: 
+        `INSERT INTO Students (first_name, last_name, email, batch_id)
+        VALUES (?, ?, ?, ?)`,
+    findStudentById: 
+        `SELECT * FROM Students
+        WHERE student_id = ?`,
+    updateStudent: 
+        `UPDATE Students
+        SET first_name = ?, last_name = ?, email = ?, batch_id = ?
+        WHERE student_id = ?`,
+    deleteStudent: 
+        `DELETE FROM Students WHERE student_id = ?`
+};
 
-module.exports = {loginSQl, courseQueries , gradeQueries, departmentQueries, batchQuerie };
+
+module.exports = {loginSQl, courseQueries , gradeQueries, departmentQueries, batchQueries, studentQueries };
