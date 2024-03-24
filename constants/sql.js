@@ -41,7 +41,19 @@ const gradeQueries = {
     `DELETE FROM Grades WHERE grade_id = ?`
 };
 
-module.exports = gradeQueries;
+const departmentQueries = {
+    selectAll: 
+        `SELECT * FROM Departments`,
+    addDepartment: 
+        `INSERT INTO Departments (department_name, department_id)
+        VALUES (?, ?)`,
+    updateDepartment: 
+        `UPDATE Departments
+        SET department_name = ?
+        WHERE department_id = ?`,
+    deleteDepartment: 
+        `DELETE FROM Departments WHERE department_id = ?`
+};
 
 
-module.exports = {loginSQl, courseQueries};
+module.exports = {loginSQl, courseQueries , gradeQueries, departmentQueries };
