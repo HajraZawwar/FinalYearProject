@@ -2,7 +2,6 @@ const db = require('../constants/db');
 const sql = require('../constants/sql');
 const config = require('../constants/config');
 
-
 const loginModel = {
     getAllLogins: async () => {
         try {
@@ -34,22 +33,23 @@ const loginModel = {
 
     getUserByUsername: async (username) => {
         try {
-            const connection = await db.getConnection();
-            const [rows, fields] = await connection.query(sql.loginSQl.selectUserByUsername, [username]);
-            connection.release();
-            // console.log(rows);
-            return rows[0]; // Assuming there is only one user with a given username
+            const [rows, fields] = await db.executeQuery(sql.loginSQl.selectUserByUsername, [username]);
+            if (rows.length > 0) {
+                return rows[0]; // Assuming there is only one user with a given username}
+            }
+            else {
+                return null; // No user found with the given username
+            }
         } catch (error) {
-            return error;
+            console.error("Error fetching user by username:", error);
+            return null; // Return null in case of an error
         }
     },
 
     //Method to register a new user
     registerUser: async (username, password, role) => {
         try {
-            const connection = await db.getConnection();
-            const [result] = await connection.query(sql.loginSQl.insertUser, [username, password, role]);
-            connection.release();
+            const [result] = await db.executeQuery(sql.loginSQl.insertUser, [username, password, role]);
 
             return result.insertId; // Return the ID of the newly inserted user
         } catch (error) {

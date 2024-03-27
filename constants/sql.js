@@ -1,47 +1,27 @@
-const loginSQl ={
+const loginSQl = {
     selectAll: 'SELECT * FROM login',
     selectLogin: 'SELECT * FROM login WHERE username = ? AND password = ?',
     selectUserByUsername: 'SELECT * FROM login WHERE username = ?',
     insertUser: 'INSERT INTO login (username, password, role) VALUES (?, ?, ?)',
 }
 
-const courseSQl ={
-    selectAll: `SELECT * FROM course`
-}
-
-
-const courseQueries = {
-    selectAll: 
-        `SELECT * FROM Courses`,
-    addCourse: 
-        `INSERT INTO Courses (course_name, course_description, course_credit)
-        VALUES (?, ?, ?)`,
-    findCourseById: 
-    ` SELECT * FROM Courses
-        WHERE course_id = ?`,
-    updateCourse: 
-    `UPDATE Courses
-     SET course_name = ?, course_description = ?, course_credit = ?
-        WHERE course_id = ?`,
-    deleteCourse: 
-    `DELETE FROM Courses WHERE course_id = ?`
+const courseSQl = {
+    selectAll: 'SELECT * FROM course',
+    addCourse: 'INSERT INTO course (CourseName, CourseCode, CreditHours) VALUES (?, ?, ?)',
+    findCourseById: 'SELECT * FROM course WHERE CourseID = ?',
+    updateCourse: 'UPDATE course SET CourseName = ?, CourseCode = ?, CreditHours = ? WHERE CourseID = ?',
+    deleteCourse: 'DELETE FROM course WHERE CourseID = ?',
 };
 
-const gradeQueries = {
-    selectAll: 
-        `SELECT * FROM Grades`,
-    addGrade: 
-        `INSERT INTO Grades (student_id, course_id, grade)
-        VALUES (?, ?, ?)`,
-    updateGrade: 
-    `UPDATE Grades
-     SET student_id = ?, course_id = ?, grade = ?
-        WHERE grade_id = ?`,
-    deleteGrade: 
-    `DELETE FROM Grades WHERE grade_id = ?`
+const gradeSQl = {
+    selectAll: 'SELECT * FROM grades',
+    addGrade: 'INSERT INTO grades (SessionID, GradeName, MinPercentage, MaxPercentage) VALUES (?, ?, ?, ?)',
+    updateGrade: 'UPDATE grades SET SessionID = ?, GradeName = ?, MinPercentage = ?, MaxPercentage = ? WHERE GradeID = ?',
+    deleteGrade: 'DELETE FROM grades WHERE GradeID = ?',
 };
 
-module.exports = gradeQueries;
+const roleSQl = {
+    selectRoleById: 'SELECT * FROM roles WHERE roleId = ?',
+};
 
-
-module.exports = {loginSQl, courseQueries};
+module.exports = { loginSQl, courseSQl, gradeSQl, roleSQl };
