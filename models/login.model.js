@@ -2,7 +2,6 @@ const db = require('../constants/db');
 const sql = require('../constants/sql');
 const config = require('../constants/config');
 
-
 const loginModel = {
     getAllLogins: async () => {
         try {
@@ -35,9 +34,15 @@ const loginModel = {
     getUserByUsername: async (username) => {
         try {
             const [rows, fields] = await db.executeQuery(loginSQl.selectUserByUsername, [username]);
-            return rows[0]; // Assuming there is only one user with a given username
+            if (rows.length > 0) {
+                return rows[0]; // Assuming there is only one user with a given username}
+            }
+            else {
+                return null; // No user found with the given username
+            }
         } catch (error) {
-            return error.message;
+            console.error("Error fetching user by username:", error);
+        return null; // Return null in case of an error
         }
     },
 
