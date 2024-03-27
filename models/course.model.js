@@ -8,8 +8,8 @@ const courseModel = {
             const [rows, fields] = await db.executeQuery(sql.courseSQl.selectAll, null);
             return rows;
         } catch (error) {
-            console.error(error);
-            throw error;
+            console.log(error);
+            res.json(config.responseGenerator(true, "", error));
         }
     },
 
@@ -23,8 +23,8 @@ const courseModel = {
                 return null;
             }
         } catch (error) {
-            console.error(error);
-            throw error;
+            console.log(error);
+            res.json(config.responseGenerator(true, "", error));
         }
     },
 
@@ -33,8 +33,8 @@ const courseModel = {
             const result = await db.executeQuery(sql.courseSQl.addCourse, [CourseName, CourseCode, CreditHours]);
             return result;
         } catch (error) {
-            console.error(error);
-            throw error;
+            console.log(error);
+            res.json(config.responseGenerator(true, "", error));
         }
     },
 
@@ -43,8 +43,8 @@ const courseModel = {
             const result = await db.executeQuery(sql.courseSQl.updateCourse, [CourseName, CourseCode, CreditHours, CourseID]);
             return result;
         } catch (error) {
-            console.error(error);
-            throw error;
+            console.log(error);
+            res.json(config.responseGenerator(true, "", error));
         }
     },
 
@@ -53,8 +53,8 @@ const courseModel = {
             const result = await db.executeQuery(sql.courseSQl.deleteCourse, [CourseID]);
             return result;
         } catch (error) {
-            console.error(error);
-            throw error;
+            console.log(error);
+            res.json(config.responseGenerator(true, "", error));
         }
     }
 };

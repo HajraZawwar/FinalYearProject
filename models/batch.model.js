@@ -1,56 +1,56 @@
 const db = require('../constants/db');
-const query = require('../constants/sql');
+const sql = require('../constants/sql');
 const config = require('../constants/config');
 
 
 const batchModel = {
     getAllBatches: async function () {
         try {
-            const [rows, fields] = await db.executeQuery(query.batchQueries.selectAll);
+            const [rows, fields] = await db.executeQuery(sql.batchSQl.selectAll);
             return rows;
         } catch (error) {
-            console.error(error);
-            throw error;
+            console.log(error);
+            res.json(config.responseGenerator(true, "", error));
         }
     },
 
-    getBatchById: async function (batchId) {
+    getBatchById: async function (BatchID) {
         try {
-            const [rows, fields] = await db.executeQuery(query.batchQueries.findBatchById, [batchId]);
+            const [rows, fields] = await db.executeQuery(sql.batchSQl.findBatchById, [BatchID]);
             return rows;
         } catch (error) {
-            console.error(error);
-            throw error;
+            console.log(error);
+            res.json(config.responseGenerator(true, "", error));
         }
     },
 
-    addBatch: async function (batchName, startDate, endDate) {
+    addBatch: async function (BatchName) {
         try {
-            const result = await db.executeQuery(query.batchQueries.addBatch, [batchName, startDate, endDate]);
+            const result = await db.executeQuery(sql.batchSQl.addBatch, [BatchName]);
             return result;
         } catch (error) {
-            console.error(error);
-            throw error;
+            console.log(error);
+            res.json(config.responseGenerator(true, "", error));
         }
     },
 
-    updateBatch: async function (batchName, startDate, endDate, batchId) {
+    updateBatch: async function (BatchName, BatchID) {
         try {
-            const result = await db.executeQuery(query.batchQueries.updateBatch, [batchName, startDate, endDate, batchId]);
+            const result = await db.executeQuery(sql.batchSQl.updateBatch, [BatchName, BatchID]);
             return result;
         } catch (error) {
-            console.error(error);
-            throw error;
+            console.log(error);
+            res.json(config.responseGenerator(true, "", error));
         }
     },
 
-    deleteBatch: async function (batchId) {
+    deleteBatch: async function (BatchID) {
         try {
-            const result = await db.executeQuery(query.batchQueries.deleteBatch, [batchId]);
+            const result = await db.executeQuery(sql.batchSQl.deleteBatch, [BatchID]);
             return result;
         } catch (error) {
-            console.error(error);
-            throw error;
+            console.log(error);
+            res.json(config.responseGenerator(true, "", error));
         }
     }
 };

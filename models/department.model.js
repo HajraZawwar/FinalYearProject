@@ -1,46 +1,55 @@
 const db = require('../constants/db');
-const query = require('../constants/sql');
+const sql = require('../constants/sql');
 const config = require('../constants/config');
 
 const departmentModel = {
     getAllDepartments: async function () {
         try {
-            const [rows, fields] = await db.executeQuery(query.departmentQueries.selectAll);
+            const [rows, fields] = await db.executeQuery(sql.departmentSQl.selectAll);
             return rows;
         } catch (error) {
-            console.error(error);
-            throw error;
+            console.log(error);
+            res.json(config.responseGenerator(true, "", error));
         }
     },
 
-
-    addDepartment: async function (departmentName) {
+    getDepartmentById: async function (DepartmentID) {
         try {
-            const result = await db.executeQuery(query.departmentQueries.addDepartment, [departmentName]);
-            return result;
+            const [rows, fields] = await db.executeQuery(sql.departmentSQl.selectDepartmentById, [DepartmentID]);
+            return rows;
         } catch (error) {
-            console.error(error);
-            throw error;
+            console.log(error);
+            res.json(config.responseGenerator(true, "", error));
         }
     },
 
-    updateDepartment: async function (departmentName, departmentId) {
+    addDepartment: async function (DepartmentName) {
         try {
-            const result = await db.executeQuery(query.departmentQueries.updateDepartment, [departmentName, departmentId]);
+            const result = await db.executeQuery(sql.departmentSQl.addDepartment, [DepartmentName]);
             return result;
         } catch (error) {
-            console.error(error);
-            throw error;
+            console.log(error);
+            res.json(config.responseGenerator(true, "", error));
         }
     },
 
-    deleteDepartment: async function (departmentId) {
+    updateDepartment: async function (DepartmentName, DepartmentID) {
         try {
-            const result = await db.executeQuery(query.departmentQueries.deleteDepartment, [departmentId]);
+            const result = await db.executeQuery(sql.departmentSQl.updateDepartment, [DepartmentName, DepartmentID]);
             return result;
         } catch (error) {
-            console.error(error);
-            throw error;
+            console.log(error);
+            res.json(config.responseGenerator(true, "", error));
+        }
+    },
+
+    deleteDepartment: async function (DepartmentID) {
+        try {
+            const result = await db.executeQuery(sql.departmentSQl.deleteDepartment, [DepartmentID]);
+            return result;
+        } catch (error) {
+            console.log(error);
+            res.json(config.responseGenerator(true, "", error));
         }
     }
 };

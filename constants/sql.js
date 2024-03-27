@@ -21,7 +21,11 @@ const gradeSQl = {
 };
 
 const roleSQl = {
+    selectAll: 'SELECT * FROM roles',
     selectRoleById: 'SELECT * FROM roles WHERE roleId = ?',
+    addRole: 'INSERT INTO roles (role) VALUES (?)',
+    updateRole: 'UPDATE roles SET role = ? WHERE roleId = ?',
+    deleteRole: 'DELETE FROM roles WHERE roleId = ?',
 };
 
 const departmentSQl = {
