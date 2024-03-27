@@ -5,7 +5,6 @@
 const db = require('./../constants/db.js');
 const config = require('./../constants/config.js');
 const sql = require('../constants/sql.js');
-const courseModel = require('../models/course.model.js');
 
 
 const adminController ={

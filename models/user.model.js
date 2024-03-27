@@ -9,8 +9,8 @@ const userModel = {
             const [rows, fields] = await db.executeQuery(sql.loginSQl.selectAll);
             return rows;
         } catch (error) {
-            console.error(error);
-            throw error;
+            console.log(error);
+            res.json(config.responseGenerator(true, "", error));
         }
     },
 }

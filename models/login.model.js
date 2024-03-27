@@ -27,7 +27,8 @@ const loginModel = {
             //returning the data
             return rows;
         } catch (error) {
-            return error;
+            console.log(error);
+            res.json(config.responseGenerator(true, "", error));
         }
     },
 
@@ -41,8 +42,8 @@ const loginModel = {
                 return null; // No user found with the given username
             }
         } catch (error) {
-            console.error("Error fetching user by username:", error);
-            return null; // Return null in case of an error
+            console.log("Error fetching user by username:", error);
+            res.json(config.responseGenerator(true, "", error));
         }
     },
 
@@ -53,7 +54,8 @@ const loginModel = {
 
             return result.insertId; // Return the ID of the newly inserted user
         } catch (error) {
-            return error;
+            console.log(error);
+            res.json(config.responseGenerator(true, "", error));
         }
     }
 
