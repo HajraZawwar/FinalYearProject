@@ -59,4 +59,44 @@ const transcriptSQl = {
     deleteTranscript: 'DELETE FROM transcript WHERE TranscriptID = ?',
 };
 
-module.exports = { loginSQl, courseSQl, gradeSQl, roleSQl, departmentSQl, batchSQl, studentSQl, transcriptSQl};
+const campusSQl = {
+    selectAll: 'SELECT * FROM campus',
+    addCampus: 'INSERT INTO campus (CampusName) VALUES (?)',
+    findCampusById: 'SELECT * FROM campus WHERE CampusID = ?',
+    updateCampus: 'UPDATE campus SET CampusName = ? WHERE CampusID = ?',
+    deleteCampus: 'DELETE FROM campus WHERE CampusID = ?',
+};
+
+const roadmapSQl = {
+    selectAll: 'SELECT * FROM roadmap',
+    addRoadmap: 'INSERT INTO roadmap (CourseID, Pre_req_ID) VALUES (?, ?)',
+    findRoadmapById: 'SELECT * FROM roadmap WHERE idroadmap = ?',
+    updateRoadmap: 'UPDATE roadmap SET CourseID = ?, Pre_req_ID = ? WHERE idroadmap = ?',
+    deleteRoadmap: 'DELETE FROM roadmap WHERE idroadmap = ?',
+};
+
+const sectionSQl = {
+    selectAll: 'SELECT * FROM section',
+    addSection: 'INSERT INTO section (SectionName) VALUES (?)',
+    findSectionById: 'SELECT * FROM section WHERE SectionID = ?',
+    updateSection: 'UPDATE section SET SectionName = ? WHERE SectionID = ?',
+    deleteSection: 'DELETE FROM section WHERE SectionID = ?',
+};
+
+const sessionSQl = {
+    selectAll: 'SELECT * FROM session',
+    addSession: 'INSERT INTO session (SessionName, StartDate, EndDate) VALUES (?, ?, ?)',
+    findSessionById: 'SELECT * FROM session WHERE SessionID = ?',
+    updateSession: 'UPDATE session SET SessionName = ?, StartDate = ?, EndDate = ? WHERE SessionID = ?',
+    deleteSession: 'DELETE FROM session WHERE SessionID = ?',
+};
+
+const teacherSQl = {
+    selectAll: 'SELECT * FROM teachers',
+    addTeacher: 'INSERT INTO teachers (TeacherCode, FirstName, LastName, Age, Gender, PhoneNo, Email, DepartmentID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+    findTeacherById: 'SELECT * FROM teachers WHERE TeacherID = ?',
+    updateTeacher: 'UPDATE teachers SET TeacherCode = ?, FirstName = ?, LastName = ?, Age = ?, Gender = ?, PhoneNo = ?, Email = ?, DepartmentID = ? WHERE TeacherID = ?',
+    deleteTeacher: 'DELETE FROM teachers WHERE TeacherID = ?',
+};
+
+module.exports = { loginSQl, courseSQl, gradeSQl, roleSQl, departmentSQl, batchSQl, studentSQl, transcriptSQl, campusSQl, roadmapSQl, sectionSQl, sessionSQl, teacherSQl };

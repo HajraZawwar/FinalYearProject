@@ -2,10 +2,10 @@ const db = require('../constants/db');
 const sql = require('../constants/sql');
 const config = require('../constants/config');
 
-const courseModel = {
-    getAllCourses: async function () {
+const campusModel = {
+    getAllCampuses: async function () {
         try {
-            const [rows, fields] = await db.executeQuery(sql.courseSQl.selectAll, null);
+            const [rows, fields] = await db.executeQuery(sql.campusSQl.selectAll, null);
             return rows;
         } catch (error) {
             console.log(error);
@@ -13,9 +13,9 @@ const courseModel = {
         }
     },
 
-    getCourseById: async function (CourseID) {
+    getCampusById: async function (CampusID) {
         try {
-            const [rows, fields] = await db.executeQuery(sql.courseSQl.findCourseById, [CourseID]);
+            const [rows, fields] = await db.executeQuery(sql.campusSQl.findCampusById, [CampusID]);
             if (rows.length > 0) {
                 return rows[0];
             }
@@ -28,9 +28,9 @@ const courseModel = {
         }
     },
 
-    addCourse: async function (CourseName, CourseCode, CreditHours) {
+    addCampus: async function (CampusName) {
         try {
-            const result = await db.executeQuery(sql.courseSQl.addCourse, [CourseName, CourseCode, CreditHours]);
+            const result = await db.executeQuery(sql.campusSQl.addCampus, [CampusName]);
             return result;
         } catch (error) {
             console.log(error);
@@ -38,9 +38,9 @@ const courseModel = {
         }
     },
 
-    updateCourse: async function (CourseName, CourseCode, CreditHours, CourseID) {
+    updateCampus: async function (CampusName, CampusID) {
         try {
-            const result = await db.executeQuery(sql.courseSQl.updateCourse, [CourseName, CourseCode, CreditHours, CourseID]);
+            const result = await db.executeQuery(sql.campusSQl.updateCampus, [CampusName, CampusID]);
             return result;
         } catch (error) {
             console.log(error);
@@ -48,9 +48,9 @@ const courseModel = {
         }
     },
 
-    deleteCourse: async function (CourseID) {
+    deleteCampus: async function (CampusID) {
         try {
-            const result = await db.executeQuery(sql.courseSQl.deleteCourse, [CourseID]);
+            const result = await db.executeQuery(sql.campusSQl.deleteCampus, [CampusID]);
             return result;
         } catch (error) {
             console.log(error);
@@ -59,4 +59,4 @@ const courseModel = {
     }
 };
 
-module.exports = courseModel;
+module.exports = campusModel;

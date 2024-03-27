@@ -1,7 +1,7 @@
-const db = require('./../constants/db.js');
-const config = require('./../constants/config.js');
+const db = require('../constants/db.js');
+const config = require('../constants/config.js');
 const sql = require('../constants/sql.js');
-const studentModel = require('../models/student.model.js');
+const studentModel = require('../models/students.model.js');
 
 const studentController = {
     getAllStudents: async (req, res) => {
