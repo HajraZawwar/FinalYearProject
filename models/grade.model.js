@@ -1,11 +1,11 @@
 const db = require('../constants/db');
-const query = require('../constants/sql');
+const sql = require('../constants/sql');
 const config = require('../constants/config');
 
 const gradeModel = {
     getAllGrades: async function () {
         try {
-            const [rows, fields] = await db.executeQuery(query.gradeQueries.selectAll);
+            const [rows, fields] = await db.executeQuery(sql.gradeSQl.selectAll);
             return rows;
         } catch (error) {
             console.error(error);
@@ -13,9 +13,9 @@ const gradeModel = {
         }
     },
 
-    addGrade: async function (studentId, courseId, grade) {
+    addGrade: async function (SessionID, GradeName, MinPercentage, MaxPercentage) {
         try {
-            const result = await db.executeQuery(query.gradeQueries.addGrade, [studentId, courseId, grade]);
+            const result = await db.executeQuery(sql.gradeSQl.addGrade, [SessionID, GradeName, MinPercentage, MaxPercentage]);
             return result;
         } catch (error) {
             console.error(error);
@@ -23,9 +23,9 @@ const gradeModel = {
         }
     },
 
-    updateGrade: async function (studentId, courseId, grade, gradeId) {
+    updateGrade: async function (SessionID, GradeName, MinPercentage, MaxPercentage, GradeID) {
         try {
-            const result = await db.executeQuery(query.gradeQueries.updateGrade, [studentId, courseId, grade, gradeId]);
+            const result = await db.executeQuery(sql.gradeSQl.updateGrade, [SessionID, GradeName, MinPercentage, MaxPercentage, GradeID]);
             return result;
         } catch (error) {
             console.error(error);
@@ -33,9 +33,9 @@ const gradeModel = {
         }
     },
 
-    deleteGrade: async function (gradeId) {
+    deleteGrade: async function (GradeID) {
         try {
-            const result = await db.executeQuery(query.gradeQueries.deleteGrade, [gradeId]);
+            const result = await db.executeQuery(sql.gradeSQl.deleteGrade, [GradeID]);
             return result;
         } catch (error) {
             console.error(error);

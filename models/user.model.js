@@ -1,13 +1,18 @@
 const db = require('../constants/db');
-const userSQL = require('../constants/sql');
+const sql = require('../constants/sql');
 const config = require('../constants/config');
 
 
 const userModel = {
-    getAllUsers: async()=>
-    {
-        // get all users from here
-    }
+    getAllUsers: async function () {
+        try {
+            const [rows, fields] = await db.executeQuery(sql.loginSQl.selectAll);
+            return rows;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    },
 }
 
-module.exports = loginModel;
+module.exports = userModel;

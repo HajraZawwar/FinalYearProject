@@ -33,7 +33,7 @@ const loginModel = {
 
     getUserByUsername: async (username) => {
         try {
-            const [rows, fields] = await db.executeQuery(loginSQl.selectUserByUsername, [username]);
+            const [rows, fields] = await db.executeQuery(sql.loginSQl.selectUserByUsername, [username]);
             if (rows.length > 0) {
                 return rows[0]; // Assuming there is only one user with a given username}
             }
@@ -42,14 +42,14 @@ const loginModel = {
             }
         } catch (error) {
             console.error("Error fetching user by username:", error);
-        return null; // Return null in case of an error
+            return null; // Return null in case of an error
         }
     },
 
     //Method to register a new user
     registerUser: async (username, password, role) => {
         try {
-            const [result] = await db.executeQuery(loginSQl.insertUser, [username, password, role]);
+            const [result] = await db.executeQuery(sql.loginSQl.insertUser, [username, password, role]);
 
             return result.insertId; // Return the ID of the newly inserted user
         } catch (error) {
