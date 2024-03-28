@@ -16,7 +16,7 @@ const studentController = {
         }
     },
 
-    getSetudentById: async (req, res) => {
+    getStudentById: async (req, res) => {
         try {
             const StudentID = req.params.StudentID;
             const [data, fields] = await studentModel.getStudentById(StudentID);

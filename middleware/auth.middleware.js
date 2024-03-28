@@ -5,7 +5,7 @@ const bycrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('./../constants/config.js');
 const loginModel = require('../models/login.model.js');
-const roleModel = require('../models/role.model.js');
+const roleModel = require('../models/roles.model.js');
 const sql = require('../constants/sql.js');
 
 // This is the middleware 

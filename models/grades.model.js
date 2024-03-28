@@ -28,8 +28,7 @@ const gradeModel = {
             const result = await db.executeQuery(sql.gradeSQl.addGrade, [SessionID, GradeName, MinPercentage, MaxPercentage]);
             return result;
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+           throw error;
         }
     },
 
