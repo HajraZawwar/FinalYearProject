@@ -43,8 +43,10 @@ const studentController = {
             const CampusID = req.body.CampusID;
             const SectionID = req.body.SectionID;
             const DepartmentID = req.body.DepartmentID;
+            const status = req.body.status;
             
-            const result = await studentModel.addStudent(RollNo, FirstName, LastName, Age, Gender, City, Country, PhoneNo, Address, BatchID, CampusID, SectionID, DepartmentID);
+            const result = await studentModel.addStudent(RollNo, FirstName, LastName, Age, Gender, City, Country, PhoneNo, Address, BatchID, CampusID, SectionID, DepartmentID, status);
+            
             res.json(config.responseGenerator(false, result, ""));
         }
 

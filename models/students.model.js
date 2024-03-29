@@ -23,7 +23,7 @@ const studentModel = {
         }
     },
 
-    addStudent: async function (RollNo, FirstName, LastName, Age, Gender, City, Country, PhoneNo, Address, BatchID, CampusID, SectionID, DepartmentID) {
+    addStudent: async function (RollNo, FirstName, LastName, Age, Gender, City, Country, PhoneNo, Address, BatchID, CampusID, SectionID, DepartmentID, status) {
         try {
             const result = await db.executeQuery(sql.studentSQl.addStudent, [RollNo, FirstName, LastName, Age, Gender, City, Country, PhoneNo, Address, BatchID, CampusID, SectionID, DepartmentID]);
             return result;
