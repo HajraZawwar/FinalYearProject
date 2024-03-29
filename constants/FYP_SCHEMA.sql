@@ -28,7 +28,7 @@ CREATE TABLE `batch` (
   `BatchID` int NOT NULL AUTO_INCREMENT,
   `BatchName` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`BatchID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,6 +37,7 @@ CREATE TABLE `batch` (
 
 LOCK TABLES `batch` WRITE;
 /*!40000 ALTER TABLE `batch` DISABLE KEYS */;
+INSERT INTO `batch` VALUES (1,'Fall 2020');
 /*!40000 ALTER TABLE `batch` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -51,7 +52,7 @@ CREATE TABLE `campus` (
   `CampusID` int NOT NULL AUTO_INCREMENT,
   `CampusName` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`CampusID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -60,6 +61,7 @@ CREATE TABLE `campus` (
 
 LOCK TABLES `campus` WRITE;
 /*!40000 ALTER TABLE `campus` DISABLE KEYS */;
+INSERT INTO `campus` VALUES (1,'Old Campus');
 /*!40000 ALTER TABLE `campus` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -77,7 +79,7 @@ CREATE TABLE `course` (
   `CreditHours` int NOT NULL,
   PRIMARY KEY (`CourseID`),
   UNIQUE KEY `CourseCode_UNIQUE` (`CourseCode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -86,7 +88,45 @@ CREATE TABLE `course` (
 
 LOCK TABLES `course` WRITE;
 /*!40000 ALTER TABLE `course` DISABLE KEYS */;
+INSERT INTO `course` VALUES (1,'CS101','Introduction to Computer Science',3),(2,'CS102','Introduction to NLP',3),(3,'CS112','Introduction to Data Science',3);
 /*!40000 ALTER TABLE `course` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `courseoffering`
+--
+
+DROP TABLE IF EXISTS `courseoffering`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `courseoffering` (
+  `courseOfferingID` int NOT NULL,
+  `department` int NOT NULL,
+  `session` int NOT NULL,
+  `batch` int NOT NULL,
+  `section` int NOT NULL,
+  `campus` int NOT NULL,
+  PRIMARY KEY (`courseOfferingID`),
+  KEY `department_idx` (`department`),
+  KEY `batch_idx` (`batch`),
+  KEY `session_idx` (`session`),
+  KEY `section_idx` (`section`),
+  KEY `campus_idx` (`campus`),
+  CONSTRAINT `batch` FOREIGN KEY (`batch`) REFERENCES `batch` (`BatchID`),
+  CONSTRAINT `campus` FOREIGN KEY (`campus`) REFERENCES `campus` (`CampusID`),
+  CONSTRAINT `department` FOREIGN KEY (`department`) REFERENCES `department` (`DepartmentID`),
+  CONSTRAINT `section` FOREIGN KEY (`section`) REFERENCES `section` (`SectionID`),
+  CONSTRAINT `session` FOREIGN KEY (`session`) REFERENCES `session` (`SessionID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `courseoffering`
+--
+
+LOCK TABLES `courseoffering` WRITE;
+/*!40000 ALTER TABLE `courseoffering` DISABLE KEYS */;
+/*!40000 ALTER TABLE `courseoffering` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -99,20 +139,17 @@ DROP TABLE IF EXISTS `courseregistration`;
 CREATE TABLE `courseregistration` (
   `CourseRegistrationID` int NOT NULL AUTO_INCREMENT,
   `SemesterRegistrationID` int DEFAULT NULL,
-  `CourseID` int DEFAULT NULL,
-  `SessionID` int DEFAULT NULL,
   `TeacherID` int DEFAULT NULL,
   `MidPercentage` decimal(10,0) DEFAULT NULL,
   `FinalPercentage` decimal(10,0) DEFAULT NULL,
   `SessionalPercentage` decimal(10,0) DEFAULT NULL,
+  `CourseOfferingID` int DEFAULT NULL,
   PRIMARY KEY (`CourseRegistrationID`),
   KEY `SemesterRegistrationID` (`SemesterRegistrationID`),
-  KEY `CourseID` (`CourseID`),
-  KEY `SessionID` (`SessionID`),
   KEY `TeacherID` (`TeacherID`),
+  KEY `courseofferingID_idx` (`CourseOfferingID`),
+  CONSTRAINT `courseofferingID` FOREIGN KEY (`CourseOfferingID`) REFERENCES `courseoffering` (`courseOfferingID`),
   CONSTRAINT `courseregistration_ibfk_1` FOREIGN KEY (`SemesterRegistrationID`) REFERENCES `semesterregistration` (`SemesterRegistrationID`),
-  CONSTRAINT `courseregistration_ibfk_2` FOREIGN KEY (`CourseID`) REFERENCES `course` (`CourseID`),
-  CONSTRAINT `courseregistration_ibfk_3` FOREIGN KEY (`SessionID`) REFERENCES `session` (`SessionID`),
   CONSTRAINT `courseregistration_ibfk_4` FOREIGN KEY (`TeacherID`) REFERENCES `teachers` (`TeacherID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -194,7 +231,7 @@ CREATE TABLE `grades` (
   PRIMARY KEY (`GradeID`),
   KEY `SessionID` (`SessionID`),
   CONSTRAINT `grades_ibfk_1` FOREIGN KEY (`SessionID`) REFERENCES `session` (`SessionID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -214,14 +251,14 @@ DROP TABLE IF EXISTS `login`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `login` (
-  `loginId` int NOT NULL,
+  `loginId` int NOT NULL AUTO_INCREMENT,
   `username` varchar(45) NOT NULL,
-  `password` varchar(45) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `role` int NOT NULL,
   PRIMARY KEY (`loginId`),
   KEY `role_idx` (`role`),
   CONSTRAINT `role` FOREIGN KEY (`role`) REFERENCES `roles` (`roleId`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -230,7 +267,36 @@ CREATE TABLE `login` (
 
 LOCK TABLES `login` WRITE;
 /*!40000 ALTER TABLE `login` DISABLE KEYS */;
+INSERT INTO `login` VALUES (2,'asad','$2b$10$yv2Da8aYwMxPx1OuhTs8C.pmz92NOpGmNzUdyMyNE0tfTSG6ZLUwq',1),(3,'asad4','$2b$10$v6onFyc03Whi6LbZnCcaLu2KB8bV2GzaNF4STL2bP.ZMuz6G573dS',1),(4,'asad890','$2b$10$Ek0fQmux7AeWj3v.V/c5TOb79ILtmm6aLq3I2OJUqFH1GaAxDeVzm',1);
 /*!40000 ALTER TABLE `login` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `roadmap`
+--
+
+DROP TABLE IF EXISTS `roadmap`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `roadmap` (
+  `idroadmap` int NOT NULL AUTO_INCREMENT,
+  `CourseID` int NOT NULL,
+  `Pre_req_ID` int DEFAULT NULL,
+  PRIMARY KEY (`idroadmap`),
+  KEY `courseID_idx` (`CourseID`),
+  KEY `Pre_req_ID_idx` (`Pre_req_ID`),
+  CONSTRAINT `courseID` FOREIGN KEY (`CourseID`) REFERENCES `course` (`CourseID`),
+  CONSTRAINT `Pre_req_ID` FOREIGN KEY (`Pre_req_ID`) REFERENCES `course` (`CourseID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `roadmap`
+--
+
+LOCK TABLES `roadmap` WRITE;
+/*!40000 ALTER TABLE `roadmap` DISABLE KEYS */;
+/*!40000 ALTER TABLE `roadmap` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -244,7 +310,7 @@ CREATE TABLE `roles` (
   `roleId` int NOT NULL AUTO_INCREMENT,
   `role` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`roleId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -253,6 +319,7 @@ CREATE TABLE `roles` (
 
 LOCK TABLES `roles` WRITE;
 /*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+INSERT INTO `roles` VALUES (1,'student');
 /*!40000 ALTER TABLE `roles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -267,7 +334,7 @@ CREATE TABLE `section` (
   `SectionID` int NOT NULL AUTO_INCREMENT,
   `SectionName` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`SectionID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -276,6 +343,7 @@ CREATE TABLE `section` (
 
 LOCK TABLES `section` WRITE;
 /*!40000 ALTER TABLE `section` DISABLE KEYS */;
+INSERT INTO `section` VALUES (1,'Morning'),(2,'Evening');
 /*!40000 ALTER TABLE `section` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -289,8 +357,9 @@ DROP TABLE IF EXISTS `semesterregistration`;
 CREATE TABLE `semesterregistration` (
   `SemesterRegistrationID` int NOT NULL AUTO_INCREMENT,
   `StudentID` int NOT NULL,
-  `SemesterNumber` int DEFAULT NULL,
-  `SessionID` int DEFAULT NULL,
+  `SemesterNumber` int NOT NULL,
+  `SessionID` int NOT NULL,
+  `status` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`SemesterRegistrationID`),
   UNIQUE KEY `StudentID_UNIQUE` (`StudentID`),
   KEY `SessionID` (`SessionID`),
@@ -351,10 +420,11 @@ CREATE TABLE `students` (
   `Country` varchar(255) DEFAULT NULL,
   `PhoneNo` varchar(20) DEFAULT NULL,
   `Address` varchar(255) DEFAULT NULL,
-  `BatchID` int DEFAULT NULL,
-  `CampusID` int DEFAULT NULL,
-  `SectionID` int DEFAULT NULL,
-  `DepartmentID` int DEFAULT NULL,
+  `BatchID` int NOT NULL,
+  `CampusID` int NOT NULL,
+  `SectionID` int NOT NULL,
+  `DepartmentID` int NOT NULL,
+  `status` varchar(45) NOT NULL,
   PRIMARY KEY (`StudentID`),
   UNIQUE KEY `RollNo_UNIQUE` (`RollNo`),
   KEY `BatchID_idx` (`BatchID`),
@@ -365,7 +435,7 @@ CREATE TABLE `students` (
   CONSTRAINT `CampusID` FOREIGN KEY (`CampusID`) REFERENCES `campus` (`CampusID`),
   CONSTRAINT `DepartmentID` FOREIGN KEY (`DepartmentID`) REFERENCES `department` (`DepartmentID`),
   CONSTRAINT `SectionID` FOREIGN KEY (`SectionID`) REFERENCES `section` (`SectionID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -418,14 +488,19 @@ DROP TABLE IF EXISTS `transcript`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `transcript` (
   `TranscriptID` int NOT NULL AUTO_INCREMENT,
-  `StudentID` int DEFAULT NULL,
-  `SemesterNumber` int DEFAULT NULL,
-  `CourseID` int DEFAULT NULL,
-  `CourseGrade` varchar(5) DEFAULT NULL,
-  `SemesterGrade` varchar(5) DEFAULT NULL,
+  `StudentID` int NOT NULL,
+  `SemesterNumber` int NOT NULL,
+  `CourseID` int NOT NULL,
+  `CourseGrade` varchar(5) NOT NULL,
+  `SemesterGPA` varchar(5) DEFAULT NULL,
+  `CourseMarks` decimal(10,0) DEFAULT NULL,
+  `CGPA` decimal(10,0) DEFAULT NULL,
+  `CourseRegID` int DEFAULT NULL,
   PRIMARY KEY (`TranscriptID`),
   KEY `StudentID` (`StudentID`),
   KEY `CourseID` (`CourseID`),
+  KEY `courseRegID_idx` (`CourseRegID`),
+  CONSTRAINT `courseRegID` FOREIGN KEY (`CourseRegID`) REFERENCES `courseregistration` (`CourseRegistrationID`),
   CONSTRAINT `transcript_ibfk_1` FOREIGN KEY (`StudentID`) REFERENCES `students` (`StudentID`),
   CONSTRAINT `transcript_ibfk_2` FOREIGN KEY (`CourseID`) REFERENCES `course` (`CourseID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -449,4 +524,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-03-12 22:13:04
+-- Dump completed on 2024-03-29 21:38:31
