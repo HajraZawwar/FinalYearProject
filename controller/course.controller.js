@@ -7,12 +7,12 @@ const courseController = {
     getAllCourses: async (req, res) => {
         try {
 
-            const [data, fields] = await courseModel.getAllCourses();
+            const data = await courseModel.getAllCourses();
             res.json(config.responseGenerator(false, data, ""));
         }
 
         catch (error) {
-            res.json(config.responseGenerator(true, null, error))
+            res.status(500).json(config.responseGenerator(true, null, error.message))
         }
 
     },
@@ -25,7 +25,7 @@ const courseController = {
         }
 
         catch (error) {
-            res.json(config.responseGenerator(true, null, error))
+            res.status(500).json(config.responseGenerator(true, null, error.message))
         }
 
     },
@@ -36,12 +36,20 @@ const courseController = {
             const CourseCode = req.body.CourseCode;
             const CreditHours = req.body.CreditHours;
 
+
+            // Check if the course already exists
+            const found = await courseModel.getCourseByCodeName(CourseCode);
+            if (found != null) {
+                res.json(config.responseGenerator(true, null, "Course already exists"));
+                return;
+            }
+
             const result = await courseModel.addCourse(CourseName, CourseCode, CreditHours);
             res.json(config.responseGenerator(false, result, ""));
         }
 
         catch (error) {
-            res.json(config.responseGenerator(true, null, error))
+            res.status(500).json(config.responseGenerator(true, null, error.message));
         }
 
     },
@@ -58,7 +66,7 @@ const courseController = {
         }
 
         catch (error) {
-            res.json(config.responseGenerator(true, null, error))
+            res.status(500).json(config.responseGenerator(true, null, error.message))
         }
 
     },
@@ -71,7 +79,7 @@ const courseController = {
         }
 
         catch (error) {
-            res.json(config.responseGenerator(true, null, error))
+            res.status(500).json(config.responseGenerator(true, null, error.message))
         }
 
     }

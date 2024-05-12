@@ -1,13 +1,13 @@
-const courseController = require('../controller/batch.controller');
+const batchController = require('../controller/batch.controller');
 const express = require('express');
 const { isAdmin } = require('../middleware/auth.middleware');
 const router = express.Router();
 
-router.get('/getall', courseController.getAllBatches);
-router.get('/getbyid', courseController.getBatchById);
-router.post('/addbatch', courseController.addBatch);
-router.put('/updatebatch', courseController.updateBatch);
-router.delete('/deletebatch', courseController.deleteBatch);
+router.get('/getall', batchController.getAllBatches);
+router.get('/getbyid', batchController.getBatchById);
+router.post('/addbatch', batchController.addBatch);
+router.put('/updatebatch', batchController.updateBatch);
+router.delete('/deletebatch', batchController.deleteBatch);
 
 
 
