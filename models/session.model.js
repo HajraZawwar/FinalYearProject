@@ -1,5 +1,4 @@
 const db = require('../constants/db.js');
-const config = require('../constants/config.js');
 const sql = require('../constants/sql.js');
 
 const sessionModel = {
@@ -9,8 +8,7 @@ const sessionModel = {
             const [rows, fields] = await db.executeQuery(sql.sessionSQl.selectAll);
             return rows;
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error;
         }
     },
 
@@ -19,28 +17,35 @@ const sessionModel = {
             const [rows, fields] = await db.executeQuery(sql.sessionSQl.selectSessionById, [SessionID]);
             return rows;
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error;
         }
     },
 
-    addSession: async function (SessionName) {
+    getSessionByName: async function (SessionName) {
         try {
-            const result = await db.executeQuery(sql.sessionSQl.addSession, [SessionName]);
+            const [rows, fields] = await db.executeQuery(sql.sessionSQl.getSessionByName, [SessionName]); 
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+    ,
+
+    addSession: async function (SessionName, StartDate, EndDate) {
+        try {
+            const result = await db.executeQuery(sql.sessionSQl.addSession, [SessionName, StartDate, EndDate]);
             return result;
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error;
         }
     },
 
-    updateSession: async function (SessionName, SessionID) {
+    updateSession: async function (SessionName, SessionID, StartDate, EndDate) {
         try {
-            const result = await db.executeQuery(sql.sessionSQl.updateSession, [SessionName, SessionID]);
+            const result = await db.executeQuery(sql.sessionSQl.updateSession, [SessionName, StartDate, EndDate, SessionID]);
             return result;
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error;
         }
     },
 
@@ -49,8 +54,7 @@ const sessionModel = {
             const result = await db.executeQuery(sql.sessionSQl.deleteSession, [SessionID]);
             return result;
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error;
         }
     }
 };

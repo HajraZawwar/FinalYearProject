@@ -7,25 +7,25 @@ const batchController = {
     getAllBatches: async (req, res) => {
         try {
 
-            const [data, fields] = await batchModel.getAllBatches();
+            const data = await batchModel.getAllBatches();
             res.json(config.responseGenerator(false, data, ""));
         }
 
         catch (error) {
-            res.json(config.responseGenerator(true, null, error))
+            res.json(config.responseGenerator(true, null, error.message))
         }
 
     },
 
     getBatchById: async (req, res) => {
         try {
-            const BatchID = req.params.BatchID;
+            const BatchID = req.body.BatchID;
             const [data, fields] = await batchModel.getBatchById(BatchID);
             res.json(config.responseGenerator(false, data, ""));
         }
 
         catch (error) {
-            res.json(config.responseGenerator(true, null, error))
+            res.json(config.responseGenerator(true, null, error.message))
         }
     },
 
@@ -38,7 +38,7 @@ const batchController = {
         }
 
         catch (error) {
-            res.json(config.responseGenerator(true, null, error))
+            res.json(config.responseGenerator(true, null, error.message))
         }
 
     },
@@ -53,13 +53,14 @@ const batchController = {
         }
 
         catch (error) {
-            res.json(config.responseGenerator(true, null, error))
+            res.json(config.responseGenerator(true, null, error.message))
         }
 
     },
 
     deleteBatch: async (req, res) => {
         try {
+
             const BatchID = req.body.BatchID;
 
             const result = await batchModel.deleteBatch(BatchID);
@@ -67,7 +68,8 @@ const batchController = {
         }
 
         catch (error) {
-            res.json(config.responseGenerator(true, null, error))
+            console.log(error)
+            res.status(500).json(config.responseGenerator(true, null, error.message))
         }
 
     }

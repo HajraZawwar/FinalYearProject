@@ -1,3 +1,5 @@
+// Used for storing all the SQL queries in one place to avoid redundancy and make it easier to manage
+
 const loginSQl = {
     selectAll: 'SELECT * FROM login',
     selectLogin: 'SELECT * FROM login WHERE username = ? AND password = ?',
@@ -9,6 +11,7 @@ const courseSQl = {
     selectAll: 'SELECT * FROM course',
     addCourse: 'INSERT INTO course (CourseName, CourseCode, CreditHours) VALUES (?, ?, ?)',
     findCourseById: 'SELECT * FROM course WHERE CourseID = ?',
+    findCourseByCode: 'SELECT * FROM course WHERE CourseCode = ?',
     updateCourse: 'UPDATE course SET CourseName = ?, CourseCode = ?, CreditHours = ? WHERE CourseID = ?',
     deleteCourse: 'DELETE FROM course WHERE CourseID = ?',
 };
@@ -17,6 +20,7 @@ const gradeSQl = {
     selectAll: 'SELECT * FROM grades',
     addGrade: 'INSERT INTO grades (SessionID, GradeName, MinPercentage, MaxPercentage) VALUES (?, ?, ?, ?)',
     updateGrade: 'UPDATE grades SET SessionID = ?, GradeName = ?, MinPercentage = ?, MaxPercentage = ? WHERE GradeID = ?',
+    getGradeByName: 'SELECT * FROM grades WHERE GradeName = ?',
     deleteGrade: 'DELETE FROM grades WHERE GradeID = ?',
 };
 
@@ -33,12 +37,14 @@ const departmentSQl = {
     addDepartment: 'INSERT INTO department (DepartmentName) VALUES (?)',
     updateDepartment: 'UPDATE department SET DepartmentName = ? WHERE DepartmentID = ?',
     deleteDepartment: 'DELETE FROM department WHERE DepartmentID = ?',
+    getDepartmentById: 'SELECT * FROM department WHERE DepartmentID = ?',
 };
 
 const batchSQl = {
     selectAll: 'SELECT * FROM batch',
     addBatch: 'INSERT INTO batch (BatchName) VALUES (?)',
     findBatchById: 'SELECT * FROM batch WHERE BatchID = ?',
+    findBatchByName: 'SELECT * FROM batch WHERE BatchName = ?',
     updateBatch: 'UPDATE batch SET BatchName = ? WHERE BatchID = ?',
     deleteBatch: 'DELETE FROM batch WHERE BatchID = ?',
 };
@@ -47,6 +53,7 @@ const studentSQl = {
     selectAll: 'SELECT * FROM students',
     addStudent: 'INSERT INTO students (RollNo, FirstName, LastName, Age, Gender, City, Country, PhoneNo, Address, BatchID, CampusID, SectionID, DepartmentID, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
     findStudentById: 'SELECT * FROM students WHERE StudentID = ?',
+    findStudentByRollNo: 'SELECT * FROM students WHERE RollNo = ?',
     updateStudent: 'UPDATE students SET RollNo = ?, FirstName = ?, LastName = ?, Age = ?, Gender = ?, City = ?, Country = ?, PhoneNo = ?, Address = ?, BatchID = ?, CampusID = ?, SectionID = ?, DepartmentID = ? WHERE StudentID = ?',
     deleteStudent: 'DELETE FROM students WHERE StudentID = ?',
 };
@@ -69,8 +76,11 @@ const campusSQl = {
 
 const roadmapSQl = {
     selectAll: 'SELECT * FROM roadmap',
+    ifRoadMapExist: 'SELECT * FROM roadmap WHERE CourseID = ? AND Pre_req_ID = ?',
     addRoadmap: 'INSERT INTO roadmap (CourseID, Pre_req_ID) VALUES (?, ?)',
     findRoadmapById: 'SELECT * FROM roadmap WHERE idroadmap = ?',
+    getRoadmapByCourseID: 'SELECT * FROM roadmap WHERE CourseID = ?',
+    getRoadmapByPreReqID: 'SELECT * FROM roadmap WHERE Pre_req_ID = ?',
     updateRoadmap: 'UPDATE roadmap SET CourseID = ?, Pre_req_ID = ? WHERE idroadmap = ?',
     deleteRoadmap: 'DELETE FROM roadmap WHERE idroadmap = ?',
 };
@@ -86,6 +96,7 @@ const sectionSQl = {
 const sessionSQl = {
     selectAll: 'SELECT * FROM session',
     addSession: 'INSERT INTO session (SessionName, StartDate, EndDate) VALUES (?, ?, ?)',
+    getSessionByName: 'SELECT * FROM session WHERE SessionName = ?',
     findSessionById: 'SELECT * FROM session WHERE SessionID = ?',
     updateSession: 'UPDATE session SET SessionName = ?, StartDate = ?, EndDate = ? WHERE SessionID = ?',
     deleteSession: 'DELETE FROM session WHERE SessionID = ?',

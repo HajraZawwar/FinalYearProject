@@ -10,6 +10,7 @@ const campusRoute = require('./routes/campus.route.js');
 const sectionRoute = require('./routes/section.route.js');
 const batchRoute = require('./routes/batch.route.js');
 const gradeRoute = require('./routes/grade.route.js');
+const sessionRoute = require('./routes/session.route.js');
 
 const adminController = require('./controller/admin.controller.js');
 
@@ -48,6 +49,9 @@ app.use('/section',sectionRoute)
 
 // Admin accessing all the grades
 app.use('/grade',gradeRoute)
+
+// Admin accessing all the sessions
+app.use('/session',sessionRoute)
 
 
 app.listen(config.expressPort, () => {

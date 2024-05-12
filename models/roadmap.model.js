@@ -9,48 +9,62 @@ const roadmapModel = {
             const [rows, fields] = await db.executeQuery(sql.roadmapSQl.selectAll);
             return rows;
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error;
         }
     },
 
     getRoadMapById: async function (idroadmap) {
         try {
-            const [rows, fields] = await db.executeQuery(sql.roadmapSQl.selectRoadMapById, [idroadmap]);
+            const [rows, fields] = await db.executeQuery(sql.roadmapSQl.findRoadmapById, [idroadmap]);
             return rows;
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error;
+        }
+    },
+
+    getRoadMapByCourseID: async function (CourseID) {
+        try {
+            const [rows, fields] = await db.executeQuery(sql.roadmapSQl.getRoadmapByCourseID, [CourseID]);
+            return rows;
+        } catch (error) {
+            throw error;
         }
     },
 
     addRoadMap: async function (CourseID, Pre_req_ID) {
         try {
-            const result = await db.executeQuery(sql.roadmapSQl.addRoadMap, [CourseID, Pre_req_ID]);
+            const result = await db.executeQuery(sql.roadmapSQl.addRoadmap, [CourseID, Pre_req_ID]);
             return result;
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
-        }
-    }, 
-
-    updateRoadMap: async function (CourseID, Pre_req_ID, idroadmap) {
-        try {
-            const result = await db.executeQuery(sql.roadmapSQl.updateRoadMap, [CourseID, Pre_req_ID, idroadmap]);
-            return result;
-        } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error;
         }
     },
 
-    deleteRoadMap: async function (idroadmap) {
+    updateRoadMap: async function (CourseID, Pre_req_ID, idroadmap) {
         try {
-            const result = await db.executeQuery(sql.roadmapSQl.deleteRoadMap, [idroadmap]);
+            const result = await db.executeQuery(sql.roadmapSQl.updateRoadmap, [CourseID, Pre_req_ID, idroadmap]);
             return result;
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error;
+        }
+    },
+
+    ifRoadMapExist: async function (CourseID, Pre_req_ID) {
+        try {
+            const [rows, fields] = await db.executeQuery(sql.roadmapSQl.ifRoadMapExist, [CourseID, Pre_req_ID]);
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+
+    deleteRoadMap: async function (idroadmap) {
+        try {
+            const result = await db.executeQuery(sql.roadmapSQl.deleteRoadmap, [idroadmap]);
+            return result;
+        } catch (error) {
+            throw error;
         }
     }
 };

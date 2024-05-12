@@ -12,6 +12,14 @@ const gradeModel = {
             res.json(config.responseGenerator(true, "", error));
         }
     },
+    getGradeByGradeName: async function (GradeName) {
+        try {
+            const [rows, fields] = await db.executeQuery(sql.gradeSQl.selectGradeByName, [GradeName]);
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    },
 
     getGradeById: async function (GradeID) {
         try {
@@ -22,13 +30,13 @@ const gradeModel = {
             res.json(config.responseGenerator(true, "", error));
         }
     },
-    
+
     addGrade: async function (SessionID, GradeName, MinPercentage, MaxPercentage) {
         try {
             const result = await db.executeQuery(sql.gradeSQl.addGrade, [SessionID, GradeName, MinPercentage, MaxPercentage]);
             return result;
         } catch (error) {
-           throw error;
+            throw error;
         }
     },
 

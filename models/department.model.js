@@ -15,11 +15,17 @@ const departmentModel = {
 
     getDepartmentById: async function (DepartmentID) {
         try {
-            const [rows, fields] = await db.executeQuery(sql.departmentSQl.selectDepartmentById, [DepartmentID]);
-            return rows;
+            const [rows, fields] = await db.executeQuery(sql.departmentSQl.getDepartmentById, [DepartmentID]);
+
+            if (rows.length > 0) {
+                return rows;
+            }
+            else {
+                return null;
+            }
+
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error;
         }
     },
 
@@ -48,8 +54,7 @@ const departmentModel = {
             const result = await db.executeQuery(sql.departmentSQl.deleteDepartment, [DepartmentID]);
             return result;
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error;
         }
     }
 };

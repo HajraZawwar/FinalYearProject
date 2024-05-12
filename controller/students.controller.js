@@ -2,6 +2,7 @@ const db = require('../constants/db.js');
 const config = require('../constants/config.js');
 const sql = require('../constants/sql.js');
 const studentModel = require('../models/students.model.js');
+const express = require('express');
 
 const studentController = {
     getAllStudents: async (req, res) => {
@@ -19,12 +20,12 @@ const studentController = {
     getStudentById: async (req, res) => {
         try {
             const StudentID = req.params.StudentID;
-            const [data, fields] = await studentModel.getStudentById(StudentID);
+            const data = await studentModel.getStudentById(StudentID);
             res.json(config.responseGenerator(false, data, ""));
         }
 
         catch (error) {
-            res.json(config.responseGenerator(true, null, error))
+            res.status(500).json(config.responseGenerator(true, null, error.message))
         }
     },
 
@@ -44,14 +45,21 @@ const studentController = {
             const SectionID = req.body.SectionID;
             const DepartmentID = req.body.DepartmentID;
             const status = req.body.status;
-            
+
+            // Check if the student already exists
+            const [rows, fields] = await studentModel.getStudentById(StudentID);
+            if (rows.length > 0) {
+                res.json(config.responseGenerator(true, null, "Student already exists"));
+                return;
+            }
+
             const result = await studentModel.addStudent(RollNo, FirstName, LastName, Age, Gender, City, Country, PhoneNo, Address, BatchID, CampusID, SectionID, DepartmentID, status);
-            
+
             res.json(config.responseGenerator(false, result, ""));
         }
 
         catch (error) {
-            res.json(config.responseGenerator(true, null, error))
+            res.status(500).json(config.responseGenerator(true, null, error.message))
         }
     },
 
@@ -70,25 +78,41 @@ const studentController = {
             const CampusID = req.body.CampusID;
             const SectionID = req.body.SectionID;
             const DepartmentID = req.body.DepartmentID;
-            
+
+            // Check if the student already exists
+            const [rows, fields] = await studentModel.getStudentById(StudentID);
+            if (rows.length === 0) {
+                res.json(config.responseGenerator(true, null, "Student does not exist"));
+                return;
+            }
+
             const result = await studentModel.updateStudent(RollNo, FirstName, LastName, Age, Gender, City, Country, PhoneNo, Address, BatchID, CampusID, SectionID, DepartmentID);
+
             res.json(config.responseGenerator(false, result, ""));
         }
 
         catch (error) {
-            res.json(config.responseGenerator(true, null, error))
+            res.status(500).json(config.responseGenerator(true, null, error));
         }
     },
 
     deleteStudent: async (req, res) => {
         try {
             const StudentID = req.body.StudentID;
+
+            // Check if the student already exists
+            const [rows, fields] = await studentModel.getStudentById(StudentID);
+            if (rows.length === 0) {
+                res.json(config.responseGenerator(true, null, "Student does not exist"));
+                return;
+            }
+
             const result = await studentModel.deleteStudent(StudentID);
             res.json(config.responseGenerator(false, result, ""));
         }
 
         catch (error) {
-            res.json(config.responseGenerator(true, null, error))
+            res.json(config.responseGenerator(true, null, error.message));
         }
     }
 
