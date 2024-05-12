@@ -6,7 +6,6 @@ const batchModel = require('../models/batch.model.js');
 const batchController = {
     getAllBatches: async (req, res) => {
         try {
-
             const data = await batchModel.getAllBatches();
             res.json(config.responseGenerator(false, data, ""));
         }
