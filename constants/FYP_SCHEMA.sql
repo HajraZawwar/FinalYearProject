@@ -28,7 +28,7 @@ CREATE TABLE `batch` (
   `BatchID` int NOT NULL AUTO_INCREMENT,
   `BatchName` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`BatchID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +37,7 @@ CREATE TABLE `batch` (
 
 LOCK TABLES `batch` WRITE;
 /*!40000 ALTER TABLE `batch` DISABLE KEYS */;
-INSERT INTO `batch` VALUES (1,'Fall 2020');
+INSERT INTO `batch` VALUES (1,'Fall 2020'),(2,'Fall 2021');
 /*!40000 ALTER TABLE `batch` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -52,7 +52,7 @@ CREATE TABLE `campus` (
   `CampusID` int NOT NULL AUTO_INCREMENT,
   `CampusName` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`CampusID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -61,7 +61,7 @@ CREATE TABLE `campus` (
 
 LOCK TABLES `campus` WRITE;
 /*!40000 ALTER TABLE `campus` DISABLE KEYS */;
-INSERT INTO `campus` VALUES (1,'Old Campus');
+INSERT INTO `campus` VALUES (1,'Old Campus'),(2,'Canal Campus');
 /*!40000 ALTER TABLE `campus` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -79,7 +79,7 @@ CREATE TABLE `course` (
   `CreditHours` int NOT NULL,
   PRIMARY KEY (`CourseID`),
   UNIQUE KEY `CourseCode_UNIQUE` (`CourseCode`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -88,7 +88,7 @@ CREATE TABLE `course` (
 
 LOCK TABLES `course` WRITE;
 /*!40000 ALTER TABLE `course` DISABLE KEYS */;
-INSERT INTO `course` VALUES (1,'CS101','Introduction to Computer Science',3),(2,'CS102','Introduction to NLP',3),(3,'CS112','Introduction to Data Science',3);
+INSERT INTO `course` VALUES (1,'CS101','Introduction to Maths',3),(2,'CS102','Introduction to NLP',3),(3,'CS112','Introduction to Data Science',3);
 /*!40000 ALTER TABLE `course` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -203,7 +203,7 @@ CREATE TABLE `department` (
   `DepartmentID` int NOT NULL AUTO_INCREMENT,
   `DepartmentName` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`DepartmentID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -212,6 +212,7 @@ CREATE TABLE `department` (
 
 LOCK TABLES `department` WRITE;
 /*!40000 ALTER TABLE `department` DISABLE KEYS */;
+INSERT INTO `department` VALUES (1,'DS'),(2,'SE');
 /*!40000 ALTER TABLE `department` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -287,7 +288,7 @@ CREATE TABLE `roadmap` (
   KEY `Pre_req_ID_idx` (`Pre_req_ID`),
   CONSTRAINT `courseID` FOREIGN KEY (`CourseID`) REFERENCES `course` (`CourseID`),
   CONSTRAINT `Pre_req_ID` FOREIGN KEY (`Pre_req_ID`) REFERENCES `course` (`CourseID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -296,6 +297,7 @@ CREATE TABLE `roadmap` (
 
 LOCK TABLES `roadmap` WRITE;
 /*!40000 ALTER TABLE `roadmap` DISABLE KEYS */;
+INSERT INTO `roadmap` VALUES (2,2,3);
 /*!40000 ALTER TABLE `roadmap` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -390,7 +392,7 @@ CREATE TABLE `session` (
   `StartDate` date DEFAULT NULL,
   `EndDate` date DEFAULT NULL,
   PRIMARY KEY (`SessionID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -399,6 +401,7 @@ CREATE TABLE `session` (
 
 LOCK TABLES `session` WRITE;
 /*!40000 ALTER TABLE `session` DISABLE KEYS */;
+INSERT INTO `session` VALUES (1,'10','2024-05-09','2025-08-09');
 /*!40000 ALTER TABLE `session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -425,17 +428,20 @@ CREATE TABLE `students` (
   `SectionID` int NOT NULL,
   `DepartmentID` int NOT NULL,
   `status` varchar(45) NOT NULL,
+  `login` int DEFAULT NULL,
   PRIMARY KEY (`StudentID`),
   UNIQUE KEY `RollNo_UNIQUE` (`RollNo`),
   KEY `BatchID_idx` (`BatchID`),
   KEY `DepartmentID_idx` (`DepartmentID`),
   KEY `SectionID_idx` (`SectionID`),
   KEY `CampusID_idx` (`CampusID`),
+  KEY `login_idx` (`login`),
   CONSTRAINT `BatchID` FOREIGN KEY (`BatchID`) REFERENCES `batch` (`BatchID`),
   CONSTRAINT `CampusID` FOREIGN KEY (`CampusID`) REFERENCES `campus` (`CampusID`),
   CONSTRAINT `DepartmentID` FOREIGN KEY (`DepartmentID`) REFERENCES `department` (`DepartmentID`),
+  CONSTRAINT `login` FOREIGN KEY (`login`) REFERENCES `login` (`loginId`),
   CONSTRAINT `SectionID` FOREIGN KEY (`SectionID`) REFERENCES `section` (`SectionID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -444,6 +450,7 @@ CREATE TABLE `students` (
 
 LOCK TABLES `students` WRITE;
 /*!40000 ALTER TABLE `students` DISABLE KEYS */;
+INSERT INTO `students` VALUES (6,'2024007','John','Doe',20,'Male','New York','USA','123-456-7890','123 Main St',1,1,1,1,'active',NULL);
 /*!40000 ALTER TABLE `students` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -524,4 +531,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-03-29 21:38:31
+-- Dump completed on 2024-05-13  1:46:36
