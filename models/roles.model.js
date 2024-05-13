@@ -5,46 +5,47 @@ const config = require('../constants/config');
 const roleModel = {
     getAllRoles: async () => {
         try {
-            const [rows, fields] = await db.executeQuery(sql.roleSQl.getAllRoles);
+            const [rows, fields] = await db.executeQuery(sql.roleSQl.selectAll);
             return rows;
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error;
         }
     },
 
     getRoleById: async (roleId) => {
         try {
-            const [rows, fields] = await db.executeQuery(sql.roleSQl.getRoleById, [roleId]);
+            const [rows, fields] = await db.executeQuery(sql.roleSQl.selectRoleById, [roleId]);
             if (rows.length > 0) {
-                return rows[0]; // There is only one role with a given roleId
+                return rows; // There is only one role with a given roleId
             }
             else {
                 return null; // No role found with the given roleId
             }
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error;
         }
     },
 
+    getRoleByName: async (roleName) => {
+        // to be implemeted
+    }
+    ,
     addRole: async (roleName) => {
         try {
             const result = await db.executeQuery(sql.roleSQl.addRole, [roleName]);
             return result;
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error;
         }
     },
 
     updateRole: async (roleName, roleId) => {
         try {
+            // console.log(roleId, roleName)
             const result = await db.executeQuery(sql.roleSQl.updateRole, [roleName, roleId]);
             return result;
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error;
         }
     },
 
@@ -53,8 +54,7 @@ const roleModel = {
             const result = await db.executeQuery(sql.roleSQl.deleteRole, [roleId]);
             return result;
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error;
         }
     }
 }

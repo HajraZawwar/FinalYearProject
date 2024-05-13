@@ -1,19 +1,16 @@
-const db = require('../constants/db.js');
 const config = require('../constants/config.js');
-const sql = require('../constants/sql.js');
 const studentModel = require('../models/students.model.js');
-const express = require('express');
 
 const studentController = {
     getAllStudents: async (req, res) => {
         try {
 
-            const [data, fields] = await studentModel.getAllStudents();
+            const data = await studentModel.getAllStudents();
             res.json(config.responseGenerator(false, data, ""));
         }
 
         catch (error) {
-            res.json(config.responseGenerator(true, null, error))
+            res.status(500).json(config.responseGenerator(true, null, error.message));
         }
     },
 
@@ -21,6 +18,10 @@ const studentController = {
         try {
             const StudentID = req.params.StudentID;
             const data = await studentModel.getStudentById(StudentID);
+            if (data === null) {
+                res.json(config.responseGenerator(true, [], "No student found with this ID"));
+                return;
+            }
             res.json(config.responseGenerator(false, data, ""));
         }
 
@@ -28,6 +29,23 @@ const studentController = {
             res.status(500).json(config.responseGenerator(true, null, error.message))
         }
     },
+
+    getStudentByRollNo: async (req, res) => {
+        try {
+            const RollNo = req.params.RollNo;
+            const data = await studentModel.getStudentByRollNo(RollNo);
+            if (data === null) {
+                res.json(config.responseGenerator(true, [], "No student found with this RollNo"));
+                return;
+            }
+            res.json(config.responseGenerator(false, data, ""));
+        }
+
+        catch (error) {
+            res.status(500).json(config.responseGenerator(true, null, error.message))
+        }
+    },
+
 
     addStudent: async (req, res) => {
         try {
@@ -47,8 +65,9 @@ const studentController = {
             const status = req.body.status;
 
             // Check if the student already exists
-            const [rows, fields] = await studentModel.getStudentById(StudentID);
-            if (rows.length > 0) {
+            const found = await studentModel.getStudentByRollNo(RollNo);
+
+            if (found !== null) {
                 res.json(config.responseGenerator(true, null, "Student already exists"));
                 return;
             }

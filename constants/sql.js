@@ -27,6 +27,8 @@ const gradeSQl = {
 const roleSQl = {
     selectAll: 'SELECT * FROM roles',
     selectRoleById: 'SELECT * FROM roles WHERE roleId = ?',
+    selectRoleByName: `SELECT * from roles
+    WHERE role =? `,
     addRole: 'INSERT INTO roles (role) VALUES (?)',
     updateRole: 'UPDATE roles SET role = ? WHERE roleId = ?',
     deleteRole: 'DELETE FROM roles WHERE roleId = ?',
@@ -54,6 +56,13 @@ const studentSQl = {
     addStudent: 'INSERT INTO students (RollNo, FirstName, LastName, Age, Gender, City, Country, PhoneNo, Address, BatchID, CampusID, SectionID, DepartmentID, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
     findStudentById: 'SELECT * FROM students WHERE StudentID = ?',
     findStudentByRollNo: 'SELECT * FROM students WHERE RollNo = ?',
+    findStudentByRollNo: 'SELECT * FROM students WHERE RollNo = ?',
+    findStudentByNames: 'SELECT * FROM students WHERE FirstName = ? AND LastName = ?',
+    findStudentByBatch: 'SELECT * FROM students WHERE BatchID = ?',
+    findStudentByCampus: 'SELECT * FROM students WHERE CampusID = ?',
+    findStudentBySection: 'SELECT * FROM students WHERE SectionID = ?',
+    findStudentByDepartment: 'SELECT * FROM students WHERE DepartmentID = ?',
+    findStudentByStatus: 'SELECT * FROM students WHERE status = ?',
     updateStudent: 'UPDATE students SET RollNo = ?, FirstName = ?, LastName = ?, Age = ?, Gender = ?, City = ?, Country = ?, PhoneNo = ?, Address = ?, BatchID = ?, CampusID = ?, SectionID = ?, DepartmentID = ? WHERE StudentID = ?',
     deleteStudent: 'DELETE FROM students WHERE StudentID = ?',
 };

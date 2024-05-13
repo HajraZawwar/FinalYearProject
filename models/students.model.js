@@ -1,7 +1,6 @@
 const db = require('../constants/db');
 const sql = require('../constants/sql');
-const config = require('../constants/config');
-const e = require('express');
+
 
 const studentModel = {
     getAllStudents: async function () {
@@ -13,9 +12,31 @@ const studentModel = {
         }
     },
 
+    getStudentByRollNo: async function (RollNo) {
+        try {
+            const [rows, fields] = await db.executeQuery(sql.studentSQl.findStudentByRollNo, [RollNo]);
+
+            if (rows.length === 0) {
+                return null;
+            }
+
+            return rows;
+        }
+        catch (error) {
+
+            throw error;
+        }
+    },
+
+
     getStudentById: async function (StudentID) {
         try {
             const [rows, fields] = await db.executeQuery(sql.studentSQl.findStudentById, [StudentID]);
+
+            if (rows.length === 0) {
+                return null;
+            }
+
             return rows;
         } catch (error) {
             throw error;
