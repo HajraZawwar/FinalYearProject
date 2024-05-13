@@ -27,6 +27,19 @@ const roleModel = {
     },
 
     getRoleByName: async (roleName) => {
+
+        try {
+            const [rows, fields] = await db.executeQuery(sql.roleSQl.selectRoleByName, [roleName]);
+            if (rows.length > 0) {
+                return rows; // There is only one role with a given roleId
+            }
+            else {
+                return null; // No role found with the given roleId
+            }
+        }
+        catch (error) {
+            throw error;
+        }
         // to be implemeted
     }
     ,

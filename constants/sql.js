@@ -1,10 +1,15 @@
 // Used for storing all the SQL queries in one place to avoid redundancy and make it easier to manage
 
+
 const loginSQl = {
     selectAll: 'SELECT * FROM login',
     selectLogin: 'SELECT * FROM login WHERE username = ? AND password = ?',
     selectUserByUsername: 'SELECT * FROM login WHERE username = ?',
     insertUser: 'INSERT INTO login (username, password, role) VALUES (?, ?, ?)',
+}
+
+const adminSQl = {
+
 }
 
 const courseSQl = {
@@ -54,8 +59,10 @@ const batchSQl = {
 const studentSQl = {
     selectAll: 'SELECT * FROM students',
     addStudent: 'INSERT INTO students (RollNo, FirstName, LastName, Age, Gender, City, Country, PhoneNo, Address, BatchID, CampusID, SectionID, DepartmentID, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    updateStudentLogin: 'UPDATE students SET login = ? WHERE StudentID = ?',
+    findBySectionAndBatchAndDegreeAndCampus: 'SELECT * FROM students WHERE SectionID = ? AND BatchID = ? AND DepartmentID = ? AND CampusID = ?',
+    findWhereLoginIsNull: 'SELECT * FROM students WHERE login IS NULL',
     findStudentById: 'SELECT * FROM students WHERE StudentID = ?',
-    findStudentByRollNo: 'SELECT * FROM students WHERE RollNo = ?',
     findStudentByRollNo: 'SELECT * FROM students WHERE RollNo = ?',
     findStudentByNames: 'SELECT * FROM students WHERE FirstName = ? AND LastName = ?',
     findStudentByBatch: 'SELECT * FROM students WHERE BatchID = ?',
@@ -63,7 +70,7 @@ const studentSQl = {
     findStudentBySection: 'SELECT * FROM students WHERE SectionID = ?',
     findStudentByDepartment: 'SELECT * FROM students WHERE DepartmentID = ?',
     findStudentByStatus: 'SELECT * FROM students WHERE status = ?',
-    updateStudent: 'UPDATE students SET RollNo = ?, FirstName = ?, LastName = ?, Age = ?, Gender = ?, City = ?, Country = ?, PhoneNo = ?, Address = ?, BatchID = ?, CampusID = ?, SectionID = ?, DepartmentID = ? WHERE StudentID = ?',
+    updateStudent: 'UPDATE students SET RollNo = ?, FirstName = ?, LastName = ?, Age = ?, Gender = ?, City = ?, Country = ?, PhoneNo = ?, Address = ?, BatchID = ?, CampusID = ?, SectionID = ?, DepartmentID = ?, status = ? WHERE StudentID = ?',
     deleteStudent: 'DELETE FROM students WHERE StudentID = ?',
 };
 
@@ -119,4 +126,4 @@ const teacherSQl = {
     deleteTeacher: 'DELETE FROM teachers WHERE TeacherID = ?',
 };
 
-module.exports = { loginSQl, courseSQl, gradeSQl, roleSQl, departmentSQl, batchSQl, studentSQl, transcriptSQl, campusSQl, roadmapSQl, sectionSQl, sessionSQl, teacherSQl };
+module.exports = { loginSQl, courseSQl, gradeSQl, roleSQl, departmentSQl, batchSQl, studentSQl, transcriptSQl, campusSQl, roadmapSQl, sectionSQl, sessionSQl, teacherSQl,adminSQl };

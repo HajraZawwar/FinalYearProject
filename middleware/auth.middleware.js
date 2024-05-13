@@ -76,11 +76,8 @@ const authMiddleware = {
                     return;
                 }
 
-                // Hash the password before storing it
-                const hashedPassword = await bycrypt.hash(password, 10);
-
                 // Register the new user
-                const userId = await loginModel.registerUser(username, hashedPassword, role);
+                const userId = await loginModel.registerUser(username, password, role);
 
                 res.json(config.responseGenerator(false, { userId, username, role }, "Registration successful"));
             }

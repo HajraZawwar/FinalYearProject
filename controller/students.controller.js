@@ -97,21 +97,34 @@ const studentController = {
             const CampusID = req.body.CampusID;
             const SectionID = req.body.SectionID;
             const DepartmentID = req.body.DepartmentID;
+            const StudentID = req.body.StudentID;
+            const status = req.body.status;
 
             // Check if the student already exists
-            const [rows, fields] = await studentModel.getStudentById(StudentID);
-            if (rows.length === 0) {
+            const rows = await studentModel.getStudentById(StudentID);
+            if (rows == null) {
                 res.json(config.responseGenerator(true, null, "Student does not exist"));
                 return;
             }
 
-            const result = await studentModel.updateStudent(RollNo, FirstName, LastName, Age, Gender, City, Country, PhoneNo, Address, BatchID, CampusID, SectionID, DepartmentID);
+            const result = await studentModel.updateStudent(RollNo, FirstName, LastName, Age, Gender, City, Country, PhoneNo, Address, BatchID, CampusID, SectionID, DepartmentID, StudentID, status);
 
             res.json(config.responseGenerator(false, result, ""));
         }
 
         catch (error) {
-            res.status(500).json(config.responseGenerator(true, null, error));
+            res.status(500).json(config.responseGenerator(true, null, error.message));
+        }
+    },
+
+    getWhereLoginIsNull: async (req, res) => {
+        try {
+            const data = await studentModel.nullLogin();
+            res.json(config.responseGenerator(false, data, ""));
+        }
+
+        catch (error) {
+            res.status(500).json(config.responseGenerator(true, null, error.message));
         }
     },
 

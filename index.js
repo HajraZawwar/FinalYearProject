@@ -11,7 +11,8 @@ const sectionRoute = require('./routes/section.route.js');
 const batchRoute = require('./routes/batch.route.js');
 const gradeRoute = require('./routes/grade.route.js');
 const sessionRoute = require('./routes/session.route.js');
-const roleRoute = require('./routes/roles.routes.js')
+const roleRoute = require('./routes/roles.routes.js');
+const adminRoute = require('./routes/admin.routes.js');
 
 const adminController = require('./controller/admin.controller.js');
 
@@ -55,6 +56,8 @@ app.use('/grade',gradeRoute)
 app.use('/session',sessionRoute)
 
 app.use('/role', roleRoute)
+
+app.use('/admin', adminRoute);
 
 
 app.listen(config.expressPort, () => {

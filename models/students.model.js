@@ -3,9 +3,30 @@ const sql = require('../constants/sql');
 
 
 const studentModel = {
+
+
     getAllStudents: async function () {
         try {
             const [rows, fields] = await db.executeQuery(sql.studentSQl.selectAll);
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    updateStudentLogin: async function (StudentID, Login) {
+        try {
+            const result = await db.executeQuery(sql.studentSQl.updateStudentLogin, [Login, StudentID]);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+
+    nullLogin: async function () {
+        try {
+            const [rows, fields] = await db.executeQuery(sql.studentSQl.findWhereLoginIsNull);
             return rows;
         } catch (error) {
             throw error;
@@ -55,7 +76,7 @@ const studentModel = {
         }
     },
 
-    updateStudent: async function (RollNo, FirstName, LastName, Age, Gender, City, Country, PhoneNo, Address, BatchID, CampusID, SectionID, DepartmentID, StudentID) {
+    updateStudent: async function (RollNo, FirstName, LastName, Age, Gender, City, Country, PhoneNo, Address, BatchID, CampusID, SectionID, DepartmentID, StudentID, status) {
         try {
 
             // Check if the student already exists
@@ -64,7 +85,7 @@ const studentModel = {
             if (rows.length === 0) {
                 throw new Error("Student does not exist");
             }
-            const result = await db.executeQuery(sql.studentSQl.updateStudent, [RollNo, FirstName, LastName, Age, Gender, City, Country, PhoneNo, Address, BatchID, CampusID, SectionID, DepartmentID, StudentID]);
+            const result = await db.executeQuery(sql.studentSQl.updateStudent, [RollNo, FirstName, LastName, Age, Gender, City, Country, PhoneNo, Address, BatchID, CampusID, SectionID, DepartmentID, status, StudentID,]);
             return result;
         } catch (error) {
             throw error;
