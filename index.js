@@ -14,8 +14,6 @@ const sessionRoute = require('./routes/session.route.js');
 const roleRoute = require('./routes/roles.routes.js');
 const adminRoute = require('./routes/admin.routes.js');
 
-const adminController = require('./controller/admin.controller.js');
-
 
 
 // Middleware to parse JSON bodies

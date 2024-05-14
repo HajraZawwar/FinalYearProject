@@ -119,11 +119,13 @@ const sessionSQl = {
 };
 
 const teacherSQl = {
+    nullLogin: `SELECT  * FROM TEACHER WHERE login is NULL`,
     selectAll: 'SELECT * FROM teachers',
     addTeacher: 'INSERT INTO teachers (TeacherCode, FirstName, LastName, Age, Gender, PhoneNo, Email, DepartmentID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+    updateLogin: 'UPDATE students SET login = ? WHERE TeacherID = ?',
     findTeacherById: 'SELECT * FROM teachers WHERE TeacherID = ?',
     updateTeacher: 'UPDATE teachers SET TeacherCode = ?, FirstName = ?, LastName = ?, Age = ?, Gender = ?, PhoneNo = ?, Email = ?, DepartmentID = ? WHERE TeacherID = ?',
     deleteTeacher: 'DELETE FROM teachers WHERE TeacherID = ?',
 };
 
-module.exports = { loginSQl, courseSQl, gradeSQl, roleSQl, departmentSQl, batchSQl, studentSQl, transcriptSQl, campusSQl, roadmapSQl, sectionSQl, sessionSQl, teacherSQl,adminSQl };
+module.exports = { loginSQl, courseSQl, gradeSQl, roleSQl, departmentSQl, batchSQl, studentSQl, transcriptSQl, campusSQl, roadmapSQl, sectionSQl, sessionSQl, teacherSQl, adminSQl };

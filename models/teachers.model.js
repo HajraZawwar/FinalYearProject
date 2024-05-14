@@ -14,6 +14,27 @@ const teacherModel = {
         }
     },
 
+    updateTeacherLogin: async function () {
+        try{
+            const [rows, fields] = await db.executeQuery(sql.teacherSQl.updateLogin);
+        }
+        catch(error)
+        {
+            
+        }
+
+    },
+
+    nullLogin: async function () {
+        try {
+            const [rows, fields] = await db.executeQuery(sql.teacherSQl.selectAll);
+            return rows;
+        } catch (error) {
+            console.log(error);
+            res.json(config.responseGenerator(true, "", error));
+        }
+    },
+
     getTeacherById: async function (TeacherID) {
         try {
             const [rows, fields] = await db.executeQuery(sql.teacherSQl.selectTeacherById, [TeacherID]);
