@@ -7,6 +7,7 @@ const config = require('./../constants/config.js');
 const loginModel = require('../models/login.model.js');
 const roleModel = require('../models/roles.model.js');
 const sql = require('../constants/sql.js');
+const teacherModel = require('../models/teachers.model.js');
 
 // This is the middleware 
 // This middleware is used to get all the logins
@@ -91,6 +92,22 @@ const authMiddleware = {
         }
     },
 
+    isSupervisor: async (req, res, next) => {
+        try {
+            if (req.user) {
+                const [roleResult] = await teacherModel.getSupervisorByID(req.TeacherID.username);
+                if (roleResult.length > 0) {
+                    next();
+                }
+            } else {
+                return res.json(config.responseGenerator(true, null, "Access denied. Supervisor privileges required."));
+            }
+        } catch (error) {
+            res.status(500).json(config.responseGenerator(true, "error", error.message));
+        }
+    },
+
+
     // verify()
     // Middleware to verify the jwt token
 
@@ -111,7 +128,7 @@ const authMiddleware = {
                 next();
             });
         } catch (error) {
-            res.json(config.responseGenerator(true, "error", error.message));
+            res.status(500).json(config.responseGenerator(true, "error", error.message));
         }
     },
 
@@ -135,7 +152,7 @@ const authMiddleware = {
             res.json(config.responseGenerator(true, "error", error.message));
         }
     },
-    
+
 
     //isStudent()
     // Middleware to check if the user has student role

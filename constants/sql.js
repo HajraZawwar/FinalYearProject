@@ -125,6 +125,11 @@ const teacherSQl = {
     updateLogin: 'UPDATE students SET login = ? WHERE TeacherID = ?',
     findTeacherById: 'SELECT * FROM teachers WHERE TeacherID = ?',
     updateTeacher: 'UPDATE teachers SET TeacherCode = ?, FirstName = ?, LastName = ?, Age = ?, Gender = ?, PhoneNo = ?, Email = ?, DepartmentID = ? WHERE TeacherID = ?',
+    getSuperVisorByDept: 'SELECT * FROM teachers WHERE DepartmentID = ?',
+    getAllSupervisors: 'SELECT * FROM supervisor',
+    getSupervisorByID: 'SELECT * FROM supervisor WHERE TeacherID = ?',
+    addSupervisor: 'INSERT INTO supervisor (TeacherID, DepartmentID) VALUES (?, ?)',
+    editSupervisor: 'UPDATE supervisor SET DepartmentID = ? WHERE TeacherID = ?',
     deleteTeacher: 'DELETE FROM teachers WHERE TeacherID = ?',
 };
 

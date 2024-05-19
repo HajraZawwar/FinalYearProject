@@ -13,6 +13,7 @@ const gradeRoute = require('./routes/grade.route.js');
 const sessionRoute = require('./routes/session.route.js');
 const roleRoute = require('./routes/roles.routes.js');
 const adminRoute = require('./routes/admin.routes.js');
+const facultyRoute = require('./routes/faculty.routes.js'); // This is the route for faculty
 
 
 
@@ -56,6 +57,8 @@ app.use('/session',sessionRoute)
 app.use('/role', roleRoute)
 
 app.use('/admin', adminRoute);
+
+app.use('/faculty', facultyRoute);
 
 
 app.listen(config.expressPort, () => {

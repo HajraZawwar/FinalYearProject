@@ -11,7 +11,6 @@ const authController = require('./auth.controller.js');
 const adminController = {
 
     // It generates logins for all students in the database whose logins are not generated yet
-
     generateLoginNULL: async function (req, res) {
         try {
             const role = req.body.role;

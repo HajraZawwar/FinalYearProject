@@ -8,7 +8,7 @@ const teacherController = {
     getAllTeachers: async (req, res) => {
         try {
 
-            const [data, fields] = await teacherModel.getAllTeachers();
+            const data = await teacherModel.getAllTeachers();
             res.json(config.responseGenerator(false, data, ""));
         }
 
@@ -17,16 +17,50 @@ const teacherController = {
         }
 
     },
+    getAllSupervisors: async (req, res) => {
+        try {
+            const data = await teacherModel.getAllSupervisors();
+            res.json(config.responseGenerator(false, data, ""));
+        }
+        catch (error) {
+            res.status(500).json(config.responseGenerator(true, null, error.message));
+        }
+    },
+    addSupervisor: async (req, res) => {
+        try {
+            const TeacherID = req.body.TeacherID;
+            const deptID = req.body.DepartmentID;
+            const result = await teacherModel.addSupervisor(TeacherID, deptID);
+            res.json(config.responseGenerator(false, result, ""));
+        }
 
+        catch (error) {
+            res.status(500).json(config.responseGenerator(true, null, error.message))
+        }
+
+    }
+    ,
+    updateSupervisor: async (req, res) => {
+        try {
+            const TeacherID = req.body.TeacherID;
+            const deptID = req.body.DepartmentID;
+            const result = await teacherModel.updateSupervisor(TeacherID, deptID);
+            res.json(config.responseGenerator(false, result, ""));
+        }
+        catch (error) {
+            res.status(500).json(config.responseGenerator(true, null, error.message))
+        }
+    }
+    ,
     getTeacherById: async (req, res) => {
         try {
             const TeacherID = req.params.TeacherID;
-            const [data, fields] = await teacherModel.getTeacherById(TeacherID);
+            const data = await teacherModel.getTeacherById(TeacherID);
             res.json(config.responseGenerator(false, data, ""));
         }
 
         catch (error) {
-            res.json(config.responseGenerator(true, null, error))
+            res.status(500).json(config.responseGenerator(true, null, error.message))
         }
     },
 
@@ -46,7 +80,7 @@ const teacherController = {
         }
 
         catch (error) {
-            res.json(config.responseGenerator(true, null, error))
+            res.status(500).json(config.responseGenerator(true, null, error.message))
         }
 
     },
@@ -68,7 +102,7 @@ const teacherController = {
         }
 
         catch (error) {
-            res.json(config.responseGenerator(true, null, error))
+            res.status(500).json(config.responseGenerator(true, null, error.message))
         }
     },
 
@@ -81,7 +115,7 @@ const teacherController = {
         }
 
         catch (error) {
-            res.json(config.responseGenerator(true, null, error))
+            res.status(500).json(config.responseGenerator(true, null, error.message))
         }
     }
 
