@@ -147,7 +147,7 @@ const studentController = {
             res.json(config.responseGenerator(true, null, error.message));
         }
     }
-
+    
 
 };
 

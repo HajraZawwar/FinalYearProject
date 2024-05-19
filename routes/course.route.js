@@ -15,6 +15,8 @@ router.get('/getroadmapbyid', roadmap.getRoadMapById);
 router.get('/getroadmap', roadmap.getAllRoadMaps);
 router.put('/updateroadmap', roadmap.updateRoadMap);
 router.delete('/deleteroadmap', roadmap.deleteRoadMap);
+router.post('/offerCourse', courseController.offerCourse);
+router.get('/getAllOfferedCourses', courseController.getAllOfferedCourses);
 
 
 module.exports = router;

@@ -14,7 +14,7 @@ const sessionRoute = require('./routes/session.route.js');
 const roleRoute = require('./routes/roles.routes.js');
 const adminRoute = require('./routes/admin.routes.js');
 const facultyRoute = require('./routes/faculty.routes.js'); // This is the route for faculty
-
+const semesterRoute = require('./routes/semester.route.js'); // This is the route for semester
 
 
 // Middleware to parse JSON bodies
@@ -59,6 +59,8 @@ app.use('/role', roleRoute)
 app.use('/admin', adminRoute);
 
 app.use('/faculty', facultyRoute);
+
+app.use('/semester',semesterRoute)
 
 
 app.listen(config.expressPort, () => {

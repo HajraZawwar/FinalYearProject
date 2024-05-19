@@ -8,8 +8,26 @@ const courseModel = {
             const [rows, fields] = await db.executeQuery(sql.courseSQl.selectAll, null);
             return rows;
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error;
+        }
+    },
+
+    getAllOfferedCourses: async function () {
+        try {
+            const [rows, fields] = await db.executeQuery(sql.courseSQl.selectAllOferedCourses, null);
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+
+    offerCourse: async function (departmentID, sessionID, batchID, sectionID, campusID, courseID) {
+        try {
+            const result = await db.executeQuery(sql.courseSQl.offerCourse, [departmentID, sessionID, batchID, sectionID, campusID, courseID]);
+            return result;
+        } catch (error) {
+            throw error;
         }
     },
 
@@ -64,8 +82,7 @@ const courseModel = {
             const result = await db.executeQuery(sql.courseSQl.deleteCourse, [CourseID]);
             return result;
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+          throw error;
         }
     }
 };

@@ -17,8 +17,10 @@ const courseSQl = {
     addCourse: 'INSERT INTO course (CourseName, CourseCode, CreditHours) VALUES (?, ?, ?)',
     findCourseById: 'SELECT * FROM course WHERE CourseID = ?',
     findCourseByCode: 'SELECT * FROM course WHERE CourseCode = ?',
+    selectAllOferedCourses: 'SELECT * FROM courseoffering join course on courseoffering.course = course.CourseID join department on courseoffering.department = department.DepartmentID join session on courseoffering.session = session.SessionID join batch on courseoffering.batch = batch.BatchID join section on courseoffering.section = section.SectionID join campus on courseoffering.campus = campus.CampusID',
     updateCourse: 'UPDATE course SET CourseName = ?, CourseCode = ?, CreditHours = ? WHERE CourseID = ?',
     deleteCourse: 'DELETE FROM course WHERE CourseID = ?',
+    offerCourse: 'INSERT INTO courseoffering (department, session, batch, section, campus, course) VALUES (?, ?, ?, ?, ?, ?)',
 };
 
 const gradeSQl = {
@@ -28,6 +30,13 @@ const gradeSQl = {
     getGradeByName: 'SELECT * FROM grades WHERE GradeName = ?',
     deleteGrade: 'DELETE FROM grades WHERE GradeID = ?',
 };
+
+const semesterSQl = {
+    selectAllsemesterRegistrations: 'SELECT * FROM semesterregistration join students on semesterregistration.StudentID = students.StudentID join session on semesterregistration.SessionID = session.SessionID',
+    updateSemesterNoAndSession: 'UPDATE semesterregistration SET SemesterNumber = ?, SessionID = ? WHERE SemesterRegistrationID = ?',
+    getSemRegByStudentID: 'SELECT * FROM semesterregistration WHERE StudentID = ?',
+    registerSemester: 'INSERT INTO semesterregistration (StudentID, SemesterNumber, SessionID, status) VALUES (?, ?, ?, ?)',
+}
 
 const roleSQl = {
     selectAll: 'SELECT * FROM roles',
@@ -56,10 +65,18 @@ const batchSQl = {
     deleteBatch: 'DELETE FROM batch WHERE BatchID = ?',
 };
 
+const statusSQl = {
+    selectAll: 'SELECT * FROM statuses',
+    addStatus: 'INSERT INTO statuses (status) VALUES (?)',
+    findStatusById: 'SELECT * FROM statuses WHERE statusID = ?',
+    findStatusByName: 'SELECT * FROM statuses WHERE statusName = ?',
+};
+
 const studentSQl = {
     selectAll: 'SELECT * FROM students',
     addStudent: 'INSERT INTO students (RollNo, FirstName, LastName, Age, Gender, City, Country, PhoneNo, Address, BatchID, CampusID, SectionID, DepartmentID, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
     updateStudentLogin: 'UPDATE students SET login = ? WHERE StudentID = ?',
+    selectSpecificStudents: 'SELECT * FROM students WHERE BatchID = ? AND SectionID = ? AND CampusID = ? AND DepartmentID = ?',
     findBySectionAndBatchAndDegreeAndCampus: 'SELECT * FROM students WHERE SectionID = ? AND BatchID = ? AND DepartmentID = ? AND CampusID = ?',
     findWhereLoginIsNull: 'SELECT * FROM students WHERE login IS NULL',
     findStudentById: 'SELECT * FROM students WHERE StudentID = ?',
@@ -133,4 +150,4 @@ const teacherSQl = {
     deleteTeacher: 'DELETE FROM teachers WHERE TeacherID = ?',
 };
 
-module.exports = { loginSQl, courseSQl, gradeSQl, roleSQl, departmentSQl, batchSQl, studentSQl, transcriptSQl, campusSQl, roadmapSQl, sectionSQl, sessionSQl, teacherSQl, adminSQl };
+module.exports = { loginSQl, courseSQl, gradeSQl, roleSQl, departmentSQl, batchSQl, studentSQl, transcriptSQl, campusSQl, roadmapSQl, sectionSQl, sessionSQl, teacherSQl, adminSQl, semesterSQl, statusSQl };
