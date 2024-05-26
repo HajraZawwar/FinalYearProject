@@ -114,7 +114,7 @@ const teacherModel = {
         } catch (error) {
             throw error;
         }
-    }
+    },
 };
 
 module.exports = teacherModel;

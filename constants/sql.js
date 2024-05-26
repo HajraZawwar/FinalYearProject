@@ -1,6 +1,7 @@
 // Used for storing all the SQL queries in one place to avoid redundancy and make it easier to manage
 
 
+
 const loginSQl = {
     selectAll: 'SELECT * FROM login',
     selectLogin: 'SELECT * FROM login WHERE username = ? AND password = ?',
@@ -20,7 +21,29 @@ const courseSQl = {
     selectAllOferedCourses: 'SELECT * FROM courseoffering join course on courseoffering.course = course.CourseID join department on courseoffering.department = department.DepartmentID join session on courseoffering.session = session.SessionID join batch on courseoffering.batch = batch.BatchID join section on courseoffering.section = section.SectionID join campus on courseoffering.campus = campus.CampusID',
     updateCourse: 'UPDATE course SET CourseName = ?, CourseCode = ?, CreditHours = ? WHERE CourseID = ?',
     deleteCourse: 'DELETE FROM course WHERE CourseID = ?',
-    offerCourse: 'INSERT INTO courseoffering (department, session, batch, section, campus, course) VALUES (?, ?, ?, ?, ?, ?)',
+    offerCourse: 'INSERT INTO courseoffering (department, session, batch, section, campus, course,teacherID) VALUES (?, ?, ?, ?, ?, ?, ?)',
+    addSessionnal: 'INSERT INTO coursesessionalstable (CourseRegistrationID, SessionalName, ObtainedMarks, TotalMarks, Weightage) VALUES (?, ?, ?, ?, ?)',
+    updtaeWeightage: 'UPDATE coursesessionalstable SET Weightage = ? WHERE CourseRegistrationID = ? AND SessionalName = ?',
+    updateTotalMarks: 'UPDATE coursesessionalstable SET TotalMarks = ? WHERE CourseRegistrationID = ? AND SessionalName = ?',
+    updateCourseSessionalObtainedMarks: 'UPDATE coursesessionalstable SET ObtainedMarks = ? WHERE CourseRegistrationID = ? AND SessionalName = ?',
+    registerCourse: 'INSERT INTO courseregistration (SemesterRegistrationID, CourseOfferingID, MidPercentage, FinalPercentage, SessionalPercentage) VALUES (?, ?, ?, ?, ?)',
+    // CourseRegistrationID, SemesterRegistrationID, MidPercentage, FinalPercentage, SessionalPercentage, CourseOfferingID
+    getAllRegisteredCourses: 'SELECT * FROM courseregistration join semesterregistration on courseregistration.SemesterRegistrationID = semesterregistration.SemesterRegistrationID join courseoffering on courseregistration.CourseOfferingID = courseoffering.CourseOfferingID',
+    getCourseRegistrationIDBySemAndCourse: 'SELECT * FROM courseregistration WHERE SemesterRegistrationID = ? AND CourseOfferingID = ?',
+    // getCourseOfferingByTeacherAndCourse: `select CourseRegistrationID from courseregistration as cr 
+    // join semesterregistration as sr on sr.SemesterRegistrationID = cr.SemesterRegistrationID
+    // join students as s on sr.StudentID = s.StudentID
+    // join  courseoffering as cf on cf.courseOfferingID = cr.courseOfferingID
+    // and cf.TeacherID = ?
+    // and cf.course= ?`,
+    getCourseRegIDByCourseOffering: 'SELECT * FROM courseregistration WHERE CourseOfferingID = ?',
+    getSessionalByName: 'SELECT * FROM coursesessionalstable WHERE SessionalName = ? AND CourseRegistrationID = ?',
+    getAllSessionalsByCourseOffering: `select cs.SessionalName, cs.Weightage, cs.TotalMarks
+    from coursesessionalstable as cs 
+    join courseregistration as cr
+    on cr.CourseRegistrationID = cs.CourseRegistrationID
+    where cr.CourseOfferingID = ?
+    group by SessionalName, cs.Weightage, cs.TotalMarks`,
 };
 
 const gradeSQl = {

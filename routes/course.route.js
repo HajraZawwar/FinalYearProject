@@ -17,6 +17,9 @@ router.put('/updateroadmap', roadmap.updateRoadMap);
 router.delete('/deleteroadmap', roadmap.deleteRoadMap);
 router.post('/offerCourse', courseController.offerCourse);
 router.get('/getAllOfferedCourses', courseController.getAllOfferedCourses);
-
+router.get('/getAllRegisteredCourses', courseController.getAllRegisteredCourses);
+router.post('/registerCourse', courseController.registerCourse);
+router.post('/addsessional', courseController.addSessionalActivity);
+router.get('/getallSessionalbycourseoffering', courseController.getAllSessionalsByCourseOffering);
 
 module.exports = router;

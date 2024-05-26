@@ -60,7 +60,7 @@ app.use('/admin', adminRoute);
 
 app.use('/faculty', facultyRoute);
 
-app.use('/semester',semesterRoute)
+app.use('/semester',semesterRoute);
 
 
 app.listen(config.expressPort, () => {

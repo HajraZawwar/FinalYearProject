@@ -1,8 +1,5 @@
 const db = require('../constants/db');
 const sql = require('../constants/sql');
-const config = require('../constants/config');
-const { register } = require('../middleware/auth.middleware');
-const { get } = require('../routes/semester.route');
 
 const semesterModel = {
     getAllSemesterRegistrations: async function () {
