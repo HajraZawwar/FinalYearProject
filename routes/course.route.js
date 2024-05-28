@@ -23,5 +23,6 @@ router.post('/addsessional', courseController.addSessionalActivity);
 router.get('/getallSessionalbycourseoffering', courseController.getAllSessionalsByCourseOffering);
 router.get('/getDetailsofStudentsinacourse', courseController.getDetailsOfStudentsInARegCourse);
 router.get('/addsessionalmarks', courseController.addSessionalMarks);
-
+router.get('/getStudentGradebookByCourseRegId', courseController.getStudentGradebookByCourseRegId);
 module.exports = router;
+router.put('/updateMidsTotal', courseController.updateMidsPercentage);

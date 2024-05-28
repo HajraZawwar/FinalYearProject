@@ -12,6 +12,17 @@ const gradeModel = {
             res.json(config.responseGenerator(true, "", error));
         }
     },
+
+    getGradeByMarks: async function (Marks)
+    {
+        try {
+            const [rows, fields] = await db.executeQuery(sql.gradeSQl.getGradeByMarks, [Marks]);
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    },
+
     getGradeByGradeName: async function (GradeName) {
         try {
             const [rows, fields] = await db.executeQuery(sql.gradeSQl.selectGradeByName, [GradeName]);

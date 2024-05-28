@@ -128,6 +128,7 @@ const studentController = {
         }
     },
 
+
     deleteStudent: async (req, res) => {
         try {
             const StudentID = req.body.StudentID;

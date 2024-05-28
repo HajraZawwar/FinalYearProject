@@ -1,11 +1,8 @@
-const db = require('./../constants/db.js');
+// Description: All the functions related to courses are defined here.
 const config = require('./../constants/config.js');
-const sql = require('../constants/sql.js');
 const courseModel = require('../models/course.model.js');
-const campusModel = require('../models/campus.model.js');
-const sectionModel = require('../models/section.model.js');
-const batchModel = require('../models/batch.model.js');
 const semesterModel = require('../models/semester.model.js');
+const gradeModel = require('../models/grades.model.js');
 
 const courseController = {
     getAllCourses: async (req, res) => {
@@ -20,6 +17,81 @@ const courseController = {
         }
 
     },
+
+    getStudentGradebookByCourseRegId: async (req, res) => {
+        try {
+            const CourseRegID = req.query.CourseRegID;
+            const sessionalData = await courseModel.getSessionalByCourseRegID(CourseRegID);
+
+            const MidsFinalsData = await courseModel.getMidsAndFinalsByCourseRegID(CourseRegID);
+
+
+            // console.log( MidsFinalsData);
+            let MidsMarks, FinalsMarks, sessionalMarks, totalMarks;
+
+            if (MidsFinalsData[0].MidObtainedMarks == null)
+                MidsMarks = 0;
+            else
+                MidsMarks = (MidsFinalsData[0].MidPercentage / MidsFinalsData[0].TotalMarks) * 35;
+
+            if (MidsFinalsData[0].FinalObtainedMarks == null)
+                FinalsMarks = 0;
+            else
+                FinalsMarks = (MidsFinalsData[0].FinalPercentage / MidsFinalsData[0].TotalMarks) * 40;
+
+            if (MidsFinalsData[0].SessionalPercentage == null)
+                sessionalMarks = 0;
+            else
+                sessionalMarks = MidsFinalsData[0].SessionalPercentage;
+
+            console.log(typeof MidsMarks, typeof FinalsMarks, typeof sessionalMarks)
+
+            totalMarks = Number(MidsMarks) + Number(FinalsMarks) + Number(sessionalMarks);
+            const grade = await gradeModel.getGradeByMarks(totalMarks);
+
+            const data = {
+                sessionalData: sessionalData,
+                MidsFinalsData: MidsFinalsData[0],
+                totalMarks: totalMarks,
+                grade: grade[0].GradeName
+            }
+
+            // console.log(data)
+            res.json(config.responseGenerator(false, data, ""));
+        }
+        catch (error) {
+            res.status(500).json(config.responseGenerator(true, null, error.message));
+        }
+    }
+    ,
+
+    updateMidsPercentage: async (req, res) => {
+        try {
+            const CourseRegID = req.body.CoursOfferingID;
+            const MidPercentage = req.body.MidPercentage;
+            const CoursRegIDs = await courseModel.getCourseRegIdByCourseOfferingId(CourseRegID);
+
+            if (CoursRegIDs.length == 0) {
+                res.status(500).json(config.responseGenerator(true, null, "Course is not registered"));
+                return;
+            }
+
+            console.log(CoursRegIDs);
+            // res.json(config.responseGenerator(false,CoursRegIDs, ""));
+       
+
+            for (let i = 0; i < CoursRegIDs.length; i++) {
+                const courseRegId = CoursRegIDs[i].CourseRegistrationID;
+                await courseModel.updateMidsPercentage(MidPercentage, courseRegId);
+            }
+
+            res.json(config.responseGenerator(false, "done Successfully", ""));
+        }
+        catch (error) {
+            res.status(500).json(config.responseGenerator(true, null, error.message));
+        }
+    },
+
     // CourseRegistrationID, SemesterRegistrationID, MidPercentage, FinalPercentage, SessionalPercentage, CourseOfferingID
     registerCourse: async (req, res) => {
         try {
@@ -40,7 +112,6 @@ const courseController = {
             const SemesterRegistrationID = SemesterReg[0].SemesterRegistrationID;
 
             //get the courseRegId if it exists or not
-
             const isCourseReg = await courseModel.getCourseRegistrationIDBySemAndCourse(SemesterRegistrationID, CourseOfferingID);
 
 
@@ -56,6 +127,17 @@ const courseController = {
             res.status(500).json(config.responseGenerator(true, null, error.message));
         }
     },
+
+    submitGradeBook: async (req, res) => {
+        try {
+
+            const courseOfferingID = req.body.CourseOfferingID;
+        }
+        catch (error) {
+            res.status(500).json(config.responseGenerator(true, null, error.message));
+        }
+    },
+
 
     addSessionalMarks: async (req, res) => {
 
@@ -80,10 +162,29 @@ const courseController = {
 
             const result = await courseModel.addSessionalMarks(ObtainedMarks, SessionalID);
 
+            const allSessionals = await courseModel.getSessionalsListByCourseOffering(CourseRegID);
+
+
+
             if (result.affectedRows == 0) {
                 res.status(500).json(config.responseGenerator(true, null, "No such sessional exists for this course registration"));
                 return;
             }
+
+
+            let totalSessionalMarks = 0;
+
+            console.log(allSessionals)
+
+            for (let i = 0; i < allSessionals.length; i++) {
+                totalSessionalMarks += allSessionals[i].Weightage * allSessionals[i].ObtainedMarks / allSessionals[i].TotalMarks;
+            }
+
+            const SolidSessionalMarks = totalSessionalMarks * 0.25;
+
+            console.log("SolidSessionalMarks : ", SolidSessionalMarks);
+
+            await courseModel.updateSessionalPercentage(SolidSessionalMarks, CourseRegID);
 
             res.json(config.responseGenerator(false, `Sessional Marks Addded Succuesfully`, ""));
 

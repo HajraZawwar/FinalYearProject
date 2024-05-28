@@ -21,6 +21,24 @@ const courseModel = {
         }
     },
 
+    addMidsMarks: async function (ObtMidMarks, CourseRegID) {
+        try {
+            const result = await db.executeQuery(sql.courseSQl.addMidMarks, [ObtMidMarks, CourseRegID]);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+    ,
+    updateMidsPercentage: async function (MidMarksTotal, CourseRegID) {
+        try {
+            const [rows, fields] = await db.executeQuery(sql.courseSQl.updateMidPercentage, [MidMarksTotal, CourseRegID]);
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    },
+
     // CourseRegistrationID, SessionalName, ObtainedMarks, TotalMarks, Weightage
     addSectionalActivity: async function (courseRegId, name, obtainedMarks, totalMarks, weightage) {
         try {
@@ -32,13 +50,30 @@ const courseModel = {
     },
     getDetailsOfStudentsInARegCourse: async function (courseOfferingID) {
         try {
-            const [rows, fields] = await db.executeQuery(sql.courseSQl.getCourseRegIDByCourseOffering, [courseOfferingID]);
+            const [rows, fields] = await db.executeQuery(sql.courseSQl.getCourseRegIDofStudentsInACourse, [courseOfferingID]);
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    },
+    
+    getMidsAndFinalsByCourseRegID: async function (CourseRegID) {
+        try {
+            const [rows, fields] = await db.executeQuery(sql.courseSQl.getMidsAndFinalsMarks, [CourseRegID]);
             return rows;
         } catch (error) {
             throw error;
         }
     },
 
+    getSessionalByCourseRegID: async function (CourseRegID) {
+        try {
+            const [rows, fields] = await db.executeQuery(sql.courseSQl.getSessionalByCourseRegID, [CourseRegID]);
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    },
 
     getCourseRegIdByCourseOfferingId: async function (courseOfferingID) {
         try {
@@ -51,13 +86,21 @@ const courseModel = {
 
     getSessionalsListByCourseOffering: async function (courseOfferingID) {
         try {
-            const [rows, fields] = await db.executeQuery(sql.courseSQl.getAllSessionalsByCourseOffering, [courseOfferingID]);
+            const [rows, fields] = await db.executeQuery(sql.courseSQl.getSessionalByCourseRegID, [courseOfferingID]);
             return rows;
         } catch (error) {
             throw error;
         }
     },
 
+    updateSessionalPercentage: async function (SessionalMarks, CourseRegID) {
+        try {
+            const [rows, fields] = await db.executeQuery(sql.courseSQl.updateSessionalPercentage, [SessionalMarks, CourseRegID]);
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    },
 
 
     getSessionalByName: async function (name, courseRegId) {

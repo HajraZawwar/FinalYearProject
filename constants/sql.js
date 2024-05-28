@@ -1,7 +1,5 @@
 // Used for storing all the SQL queries in one place to avoid redundancy and make it easier to manage
 
-
-
 const loginSQl = {
     selectAll: 'SELECT * FROM login',
     selectLogin: 'SELECT * FROM login WHERE username = ? AND password = ?',
@@ -44,7 +42,7 @@ const courseSQl = {
     on cr.CourseRegistrationID = cs.CourseRegistrationID
     where cr.CourseOfferingID = ?
     group by SessionalName, cs.Weightage, cs.TotalMarks`,
-    getCourseRegIDofStudentsInACourse:`select distinct (st.StudentID), st.RollNo,st.FirstName, st.LastName, cr.CourseRegistrationID, cr.CourseOfferingID
+    getCourseRegIDofStudentsInACourse: `select distinct (st.StudentID), st.RollNo,st.FirstName, st.LastName, cr.CourseRegistrationID, cr.CourseOfferingID
     from coursesessionalstable as cs 
     join courseregistration as cr
     on cr.CourseRegistrationID = cs.CourseRegistrationID
@@ -52,6 +50,12 @@ const courseSQl = {
     join students as st on st.StudentID = sr.StudentID
     where cr.CourseOfferingID = ?`,
     addSessionalMarks: 'UPDATE coursesessionalstable SET ObtainedMarks = ? WHERE  SessionalID = ?',
+    getSessionalByCourseRegID: 'SELECT * FROM coursesessionalstable WHERE CourseRegistrationID = ?',
+    updateSessionalPercentage: 'UPDATE courseregistration SET SessionalPercentage = ? WHERE CourseRegistrationID = ?',
+    updateMidPercentage: 'UPDATE courseregistration SET MidPercentage = ? WHERE CourseRegistrationID = ?',
+    updateFinalPercentage: 'UPDATE courseregistration SET FinalPercentage = ? WHERE CourseRegistrationID = ?',
+    getMidsAndFinalsMarks: `SELECT * from courseregistration as cr where cr.courseregistrationID = ?`,
+    addMidsMarks: 'UPDATE courseregistration SET MidObtained = ? WHERE CourseRegistrationID = ?',
 };
 
 const gradeSQl = {
@@ -60,6 +64,9 @@ const gradeSQl = {
     updateGrade: 'UPDATE grades SET SessionID = ?, GradeName = ?, MinPercentage = ?, MaxPercentage = ? WHERE GradeID = ?',
     getGradeByName: 'SELECT * FROM grades WHERE GradeName = ?',
     deleteGrade: 'DELETE FROM grades WHERE GradeID = ?',
+    getGradeByMarks: `SELECT GradeName
+    FROM Grades
+    WHERE ? BETWEEN MinPercentage AND MaxPercentage;`
 };
 
 const semesterSQl = {
