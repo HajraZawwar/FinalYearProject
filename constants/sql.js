@@ -55,7 +55,8 @@ const courseSQl = {
     updateMidPercentage: 'UPDATE courseregistration SET MidPercentage = ? WHERE CourseRegistrationID = ?',
     updateFinalPercentage: 'UPDATE courseregistration SET FinalPercentage = ? WHERE CourseRegistrationID = ?',
     getMidsAndFinalsMarks: `SELECT * from courseregistration as cr where cr.courseregistrationID = ?`,
-    addMidsMarks: 'UPDATE courseregistration SET MidObtained = ? WHERE CourseRegistrationID = ?',
+    addMidsMarks: 'UPDATE courseregistration SET MidObtainedMarks = ? WHERE CourseRegistrationID = ?',
+    addFinalMarks: 'UPDATE courseregistration SET FinalObtainedMarks = ? WHERE CourseRegistrationID = ?',
 };
 
 const gradeSQl = {

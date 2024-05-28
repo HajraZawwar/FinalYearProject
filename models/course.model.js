@@ -23,13 +23,31 @@ const courseModel = {
 
     addMidsMarks: async function (ObtMidMarks, CourseRegID) {
         try {
-            const result = await db.executeQuery(sql.courseSQl.addMidMarks, [ObtMidMarks, CourseRegID]);
+            const result = await db.executeQuery(sql.courseSQl.addMidsMarks, [ObtMidMarks, CourseRegID]);
             return result;
         } catch (error) {
             throw error;
         }
     }
     ,
+    addFinalMarks: async function (ObtFinalMarks, CourseRegID) {
+        try {
+            const result = await db.executeQuery(sql.courseSQl.addFinalMarks, [ObtFinalMarks, CourseRegID]);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    },
+    updateFinalPercentage: async function (FinalMarksTotal, CourseRegID) {
+        try {
+            const [rows, fields] = await db.executeQuery(sql.courseSQl.updateFinalPercentage, [FinalMarksTotal, CourseRegID]);
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    },
+    
+
     updateMidsPercentage: async function (MidMarksTotal, CourseRegID) {
         try {
             const [rows, fields] = await db.executeQuery(sql.courseSQl.updateMidPercentage, [MidMarksTotal, CourseRegID]);

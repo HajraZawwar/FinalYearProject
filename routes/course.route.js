@@ -26,3 +26,7 @@ router.get('/addsessionalmarks', courseController.addSessionalMarks);
 router.get('/getStudentGradebookByCourseRegId', courseController.getStudentGradebookByCourseRegId);
 module.exports = router;
 router.put('/updateMidsTotal', courseController.updateMidsPercentage);
+router.put('/updateFinalTotal', courseController.updateFinalPercentage);
+router.put('/addMidsMarks',courseController.addMidsMarks);
+router.put('/addFinalMarks',courseController.addFinalMarks);
+

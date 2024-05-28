@@ -18,6 +18,36 @@ const courseController = {
 
     },
 
+    addFinalMarks: async (req, res) => {
+        try {
+            const CourseRegID = req.body.CourseRegID;
+            const FinalMarks = req.body.FinalMarks;
+
+
+
+            const MidsAndFinalData = await courseModel.getMidsAndFinalsByCourseRegID(CourseRegID);
+
+            if (MidsAndFinalData[0].FinalPercentage < FinalMarks) {
+                res.status(500).json(config.responseGenerator(true, null, "Obtained Final Marks cannot be greater than total Final marks"));
+                return;
+            }
+
+            const result = await courseModel.addFinalMarks(FinalMarks, CourseRegID);
+
+            if (result.affectedRows == 0) {
+                res.status(500).json(config.responseGenerator(true, null, "No such course registration exists"));
+                return;
+            }
+
+            res.json(config.responseGenerator(false, "Final Marks Added Successfully", ""));
+        }
+        catch (error) {
+            res.status(500).json(config.responseGenerator(true, null, error.message));
+        }
+
+    },
+
+
     getStudentGradebookByCourseRegId: async (req, res) => {
         try {
             const CourseRegID = req.query.CourseRegID;
@@ -27,26 +57,28 @@ const courseController = {
 
 
             // console.log( MidsFinalsData);
-            let MidsMarks, FinalsMarks, sessionalMarks, totalMarks;
+            let MidsMarks, FinalsMarks, sessionalMarks, totalMarks = 0;
 
             if (MidsFinalsData[0].MidObtainedMarks == null)
                 MidsMarks = 0;
             else
-                MidsMarks = (MidsFinalsData[0].MidPercentage / MidsFinalsData[0].TotalMarks) * 35;
+                MidsMarks = (MidsFinalsData[0].MidObtainedMarks / MidsFinalsData[0].MidPercentage) * 35;
 
             if (MidsFinalsData[0].FinalObtainedMarks == null)
                 FinalsMarks = 0;
             else
-                FinalsMarks = (MidsFinalsData[0].FinalPercentage / MidsFinalsData[0].TotalMarks) * 40;
+                FinalsMarks = (MidsFinalsData[0].FinalObtainedMarks / MidsFinalsData[0].FinalPercentage) * 40;
 
             if (MidsFinalsData[0].SessionalPercentage == null)
                 sessionalMarks = 0;
             else
                 sessionalMarks = MidsFinalsData[0].SessionalPercentage;
 
-            console.log(typeof MidsMarks, typeof FinalsMarks, typeof sessionalMarks)
+            // console.log(typeof MidsMarks, typeof FinalsMarks, typeof sessionalMarks)
+
 
             totalMarks = Number(MidsMarks) + Number(FinalsMarks) + Number(sessionalMarks);
+
             const grade = await gradeModel.getGradeByMarks(totalMarks);
 
             const data = {
@@ -65,6 +97,33 @@ const courseController = {
     }
     ,
 
+    updateFinalPercentage: async (req, res) => {
+        try {
+            const CourseOfferingID = req.body.CoursOfferingID;
+            const FinalPercentage = req.body.FinalPercentage;
+            const CourseRegIDs = await courseModel.getCourseRegIdByCourseOfferingId(CourseOfferingID);
+
+            if (CourseRegIDs.length == 0) {
+                res.status(500).json(config.responseGenerator(true, null, "Course is not registered"));
+                return;
+            }
+
+            for (let i = 0; i < CourseRegIDs.length; i++) {
+                const courseRegId = CourseRegIDs[i].CourseRegistrationID;
+                await courseModel.updateFinalPercentage(FinalPercentage, courseRegId);
+            }
+
+            res.json(config.responseGenerator(false, "done Successfully", ""));
+
+        }
+
+        catch (error) {
+            res.status(500).json(config.responseGenerator(true, null, error.message));
+        }
+    },
+
+
+
     updateMidsPercentage: async (req, res) => {
         try {
             const CourseRegID = req.body.CoursOfferingID;
@@ -78,7 +137,6 @@ const courseController = {
 
             console.log(CoursRegIDs);
             // res.json(config.responseGenerator(false,CoursRegIDs, ""));
-       
 
             for (let i = 0; i < CoursRegIDs.length; i++) {
                 const courseRegId = CoursRegIDs[i].CourseRegistrationID;
@@ -138,6 +196,31 @@ const courseController = {
         }
     },
 
+    addMidsMarks: async (req, res) => {
+        try {
+            const CourseRegID = req.body.CourseRegID;
+            const MidMarks = req.body.MidMarks;
+
+            const result = await courseModel.addMidsMarks(MidMarks, CourseRegID);
+
+            const MidsAndFinalData = await courseModel.getMidsAndFinalsByCourseRegID(CourseRegID);
+
+            if (MidsAndFinalData[0].MidPercentage < MidMarks) {
+                res.status(500).json(config.responseGenerator(true, null, "Obtained Mid Marks cannot be greater than total Mids marks"));
+                return;
+            }
+
+            if (result.affectedRows == 0) {
+                res.status(500).json(config.responseGenerator(true, null, "No such course registration exists"));
+                return;
+            }
+
+            res.json(config.responseGenerator(false, "Mid Marks Added Successfully", ""));
+        }
+        catch (error) {
+            res.status(500).json(config.responseGenerator(true, null, error.message));
+        }
+    },
 
     addSessionalMarks: async (req, res) => {
 
