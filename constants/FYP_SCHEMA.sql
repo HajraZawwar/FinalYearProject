@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `fyp` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `fyp`;
 -- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
 --
 -- Host: localhost    Database: fyp
@@ -105,6 +107,7 @@ CREATE TABLE `courseoffering` (
   `section` int NOT NULL,
   `campus` int NOT NULL,
   `course` int NOT NULL,
+  `teacherID` int NOT NULL,
   PRIMARY KEY (`courseOfferingID`),
   KEY `department_idx` (`department`),
   KEY `batch_idx` (`batch`),
@@ -112,13 +115,15 @@ CREATE TABLE `courseoffering` (
   KEY `section_idx` (`section`),
   KEY `campus_idx` (`campus`),
   KEY `course_idx` (`course`),
+  KEY `teacherID_idx` (`teacherID`),
   CONSTRAINT `batch` FOREIGN KEY (`batch`) REFERENCES `batch` (`BatchID`),
   CONSTRAINT `campus` FOREIGN KEY (`campus`) REFERENCES `campus` (`CampusID`),
   CONSTRAINT `course` FOREIGN KEY (`course`) REFERENCES `course` (`CourseID`),
   CONSTRAINT `department` FOREIGN KEY (`department`) REFERENCES `department` (`DepartmentID`),
   CONSTRAINT `section` FOREIGN KEY (`section`) REFERENCES `section` (`SectionID`),
-  CONSTRAINT `session` FOREIGN KEY (`session`) REFERENCES `session` (`SessionID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `session` FOREIGN KEY (`session`) REFERENCES `session` (`SessionID`),
+  CONSTRAINT `teacher` FOREIGN KEY (`teacherID`) REFERENCES `teachers` (`TeacherID`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -127,7 +132,7 @@ CREATE TABLE `courseoffering` (
 
 LOCK TABLES `courseoffering` WRITE;
 /*!40000 ALTER TABLE `courseoffering` DISABLE KEYS */;
-INSERT INTO `courseoffering` VALUES (1,1,1,1,2,1,2);
+INSERT INTO `courseoffering` VALUES (2,1,1,1,1,2,2,1),(3,1,1,1,1,2,1,1);
 /*!40000 ALTER TABLE `courseoffering` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -141,19 +146,18 @@ DROP TABLE IF EXISTS `courseregistration`;
 CREATE TABLE `courseregistration` (
   `CourseRegistrationID` int NOT NULL AUTO_INCREMENT,
   `SemesterRegistrationID` int DEFAULT NULL,
-  `TeacherID` int DEFAULT NULL,
-  `MidPercentage` decimal(10,0) DEFAULT NULL,
-  `FinalPercentage` decimal(10,0) DEFAULT NULL,
-  `SessionalPercentage` decimal(10,0) DEFAULT NULL,
+  `MidPercentage` decimal(10,2) DEFAULT NULL,
+  `FinalPercentage` decimal(10,2) DEFAULT NULL,
+  `SessionalPercentage` decimal(10,2) DEFAULT NULL,
   `CourseOfferingID` int DEFAULT NULL,
+  `MidObtainedMarks` decimal(10,2) DEFAULT NULL,
+  `FinalObtainedMarks` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`CourseRegistrationID`),
   KEY `SemesterRegistrationID` (`SemesterRegistrationID`),
-  KEY `TeacherID` (`TeacherID`),
   KEY `courseoffering_idx` (`CourseOfferingID`),
   CONSTRAINT `courseoffering` FOREIGN KEY (`CourseOfferingID`) REFERENCES `courseoffering` (`courseOfferingID`),
-  CONSTRAINT `courseregistration_ibfk_1` FOREIGN KEY (`SemesterRegistrationID`) REFERENCES `semesterregistration` (`SemesterRegistrationID`),
-  CONSTRAINT `courseregistration_ibfk_4` FOREIGN KEY (`TeacherID`) REFERENCES `teachers` (`TeacherID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `courseregistration_ibfk_1` FOREIGN KEY (`SemesterRegistrationID`) REFERENCES `semesterregistration` (`SemesterRegistrationID`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -162,6 +166,7 @@ CREATE TABLE `courseregistration` (
 
 LOCK TABLES `courseregistration` WRITE;
 /*!40000 ALTER TABLE `courseregistration` DISABLE KEYS */;
+INSERT INTO `courseregistration` VALUES (1,4,0.00,0.00,5.00,2,NULL,NULL),(3,4,70.00,80.00,16.81,3,67.00,70.00),(4,6,70.00,80.00,5.00,3,NULL,NULL),(5,7,70.00,80.00,5.00,3,NULL,NULL),(6,10,70.00,80.00,5.00,3,NULL,NULL),(7,12,70.00,80.00,5.00,3,NULL,NULL);
 /*!40000 ALTER TABLE `courseregistration` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -174,15 +179,15 @@ DROP TABLE IF EXISTS `coursesessionalstable`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `coursesessionalstable` (
   `SessionalID` int NOT NULL AUTO_INCREMENT,
-  `CourseRegistrationID` int DEFAULT NULL,
-  `SessionalName` varchar(255) DEFAULT NULL,
+  `CourseRegistrationID` int NOT NULL,
+  `SessionalName` varchar(255) NOT NULL,
   `ObtainedMarks` int DEFAULT NULL,
-  `TotalMarks` int DEFAULT NULL,
-  `Weightage` int DEFAULT NULL,
+  `TotalMarks` int NOT NULL,
+  `Weightage` int NOT NULL,
   PRIMARY KEY (`SessionalID`),
   KEY `CourseRegistrationID` (`CourseRegistrationID`),
   CONSTRAINT `coursesessionalstable_ibfk_1` FOREIGN KEY (`CourseRegistrationID`) REFERENCES `courseregistration` (`CourseRegistrationID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -191,6 +196,7 @@ CREATE TABLE `coursesessionalstable` (
 
 LOCK TABLES `coursesessionalstable` WRITE;
 /*!40000 ALTER TABLE `coursesessionalstable` DISABLE KEYS */;
+INSERT INTO `coursesessionalstable` VALUES (12,3,'Project-Finay-Year',89,100,25),(13,4,'Project-Finay-Year',0,100,25),(14,5,'Project-Finay-Year',0,100,25),(15,6,'Project-Finay-Year',0,100,25),(16,7,'Project-Finay-Year',0,100,25),(17,1,'Quiz 1',0,100,50),(18,3,'Assignment',90,100,50),(19,4,'Assignment',0,100,50),(20,5,'Assignment',0,100,50),(21,6,'Assignment',0,100,50),(22,7,'Assignment',0,100,50),(23,3,'Assignment -7',0,100,25),(24,4,'Assignment -7',0,100,25),(25,5,'Assignment -7',0,100,25),(26,6,'Assignment -7',0,100,25),(27,7,'Assignment -7',0,100,25);
 /*!40000 ALTER TABLE `coursesessionalstable` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -234,7 +240,7 @@ CREATE TABLE `grades` (
   PRIMARY KEY (`GradeID`),
   KEY `SessionID` (`SessionID`),
   CONSTRAINT `grades_ibfk_1` FOREIGN KEY (`SessionID`) REFERENCES `session` (`SessionID`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -243,6 +249,7 @@ CREATE TABLE `grades` (
 
 LOCK TABLES `grades` WRITE;
 /*!40000 ALTER TABLE `grades` DISABLE KEYS */;
+INSERT INTO `grades` VALUES (4,1,'A',90,100),(5,1,'A-',85,89),(6,1,'B+',80,84),(7,1,'B',75,79),(8,1,'B-',70,74),(9,1,'C+',65,69),(10,1,'C',60,64),(11,1,'C-',55,59),(12,1,'D+',50,54),(13,1,'D',45,49),(14,1,'D-',40,44),(15,1,'F',0,39);
 /*!40000 ALTER TABLE `grades` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -261,7 +268,7 @@ CREATE TABLE `login` (
   PRIMARY KEY (`loginId`),
   KEY `role_idx` (`role`),
   CONSTRAINT `role` FOREIGN KEY (`role`) REFERENCES `roles` (`roleId`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -270,7 +277,7 @@ CREATE TABLE `login` (
 
 LOCK TABLES `login` WRITE;
 /*!40000 ALTER TABLE `login` DISABLE KEYS */;
-INSERT INTO `login` VALUES (2,'asad','$2b$10$yv2Da8aYwMxPx1OuhTs8C.pmz92NOpGmNzUdyMyNE0tfTSG6ZLUwq',1),(3,'asad4','$2b$10$v6onFyc03Whi6LbZnCcaLu2KB8bV2GzaNF4STL2bP.ZMuz6G573dS',1),(4,'asad890','$2b$10$Ek0fQmux7AeWj3v.V/c5TOb79ILtmm6aLq3I2OJUqFH1GaAxDeVzm',1),(7,'2024007','$2b$10$Nx1Zcjs6942SuHElB0lu1erJ9d/dBycsxZIsYKuJVk88mbUARZ1Ha',1),(8,'98998898','$2b$10$oC6GhkvxTu.y8axrlLZWrunxIwaOutqSnOAkvGS8MIXtxpj7k9cWi',1),(9,'2024083','$2b$10$HFJrbdzXjTaHGSWjmFgLy.0UWk/YMXnnNGvnilMTTSmAs2i0AokIu',1);
+INSERT INTO `login` VALUES (2,'asad','$2b$10$yv2Da8aYwMxPx1OuhTs8C.pmz92NOpGmNzUdyMyNE0tfTSG6ZLUwq',1),(3,'asad4','$2b$10$v6onFyc03Whi6LbZnCcaLu2KB8bV2GzaNF4STL2bP.ZMuz6G573dS',1),(4,'asad890','$2b$10$Ek0fQmux7AeWj3v.V/c5TOb79ILtmm6aLq3I2OJUqFH1GaAxDeVzm',1),(7,'2024007','$2b$10$Nx1Zcjs6942SuHElB0lu1erJ9d/dBycsxZIsYKuJVk88mbUARZ1Ha',1),(8,'98998898','$2b$10$oC6GhkvxTu.y8axrlLZWrunxIwaOutqSnOAkvGS8MIXtxpj7k9cWi',1),(9,'2024083','$2b$10$HFJrbdzXjTaHGSWjmFgLy.0UWk/YMXnnNGvnilMTTSmAs2i0AokIu',1),(10,'2023A01','$2b$10$6wTYUh3W9Oi.axmaiOzrw./vSqFRazR50o3SCqTbZbMzFeGX7SBcS',1),(11,'202eA01','$2b$10$cu/llKBAemyFvI6GwQRRIet0I879frMbnlFGD/qF4Zrp3AWp.YgNO',1);
 /*!40000 ALTER TABLE `login` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -371,7 +378,7 @@ CREATE TABLE `semesterregistration` (
   CONSTRAINT `semesterregistration_ibfk_1` FOREIGN KEY (`StudentID`) REFERENCES `students` (`StudentID`),
   CONSTRAINT `semesterregistration_ibfk_2` FOREIGN KEY (`SessionID`) REFERENCES `session` (`SessionID`),
   CONSTRAINT `status` FOREIGN KEY (`status`) REFERENCES `statuses` (`statusID`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -380,7 +387,7 @@ CREATE TABLE `semesterregistration` (
 
 LOCK TABLES `semesterregistration` WRITE;
 /*!40000 ALTER TABLE `semesterregistration` DISABLE KEYS */;
-INSERT INTO `semesterregistration` VALUES (4,6,5,1,1),(6,9,5,1,1),(7,10,2,1,1);
+INSERT INTO `semesterregistration` VALUES (4,6,5,1,1),(6,9,5,1,1),(7,10,2,1,1),(10,12,6,1,1),(12,13,6,1,1);
 /*!40000 ALTER TABLE `semesterregistration` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -471,7 +478,7 @@ CREATE TABLE `students` (
   CONSTRAINT `DepartmentID` FOREIGN KEY (`DepartmentID`) REFERENCES `department` (`DepartmentID`),
   CONSTRAINT `login` FOREIGN KEY (`login`) REFERENCES `login` (`loginId`),
   CONSTRAINT `SectionID` FOREIGN KEY (`SectionID`) REFERENCES `section` (`SectionID`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -480,7 +487,7 @@ CREATE TABLE `students` (
 
 LOCK TABLES `students` WRITE;
 /*!40000 ALTER TABLE `students` DISABLE KEYS */;
-INSERT INTO `students` VALUES (6,'2024007','Jhooonnn','Snooww',20,'Male','New York','USA','123-456-7890','123 Main St',1,1,1,1,'active',7),(9,'98998898','John','Doe',20,'Male','New York','USA','123-456-7890','123 Main St',1,1,1,1,'active',8),(10,'2024083','Jhooonnn','Snooww',20,'Male','New York','USA','123-456-7890','123 Main St',1,1,1,1,'active',9);
+INSERT INTO `students` VALUES (6,'2024007','Jhooonnn','Snooww',20,'Male','New York','USA','123-456-7890','123 Main St',1,1,1,1,'active',7),(9,'98998898','John','Doe',20,'Male','New York','USA','123-456-7890','123 Main St',1,1,1,1,'active',8),(10,'2024083','Jhooonnn','Snooww',20,'Male','New York','USA','123-456-7890','123 Main St',1,1,1,1,'active',9),(12,'2023A01','John','Doe',21,'Male','New York','USA','+1234567890','123 Main St, New York, NY 10001',1,2,2,2,'active',10),(13,'202eA01','hhhehehe','Doe',21,'Male','New York','USA','+1234567890','123 Main St, New York, NY 10001',1,2,2,2,'active',11);
 /*!40000 ALTER TABLE `students` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -583,6 +590,30 @@ LOCK TABLES `transcript` WRITE;
 /*!40000 ALTER TABLE `transcript` DISABLE KEYS */;
 /*!40000 ALTER TABLE `transcript` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `weights`
+--
+
+DROP TABLE IF EXISTS `weights`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `weights` (
+  `weightID` int NOT NULL,
+  `name` varchar(45) NOT NULL,
+  `percentage` decimal(10,0) DEFAULT NULL,
+  PRIMARY KEY (`weightID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `weights`
+--
+
+LOCK TABLES `weights` WRITE;
+/*!40000 ALTER TABLE `weights` DISABLE KEYS */;
+/*!40000 ALTER TABLE `weights` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -593,4 +624,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-19 21:34:18
+-- Dump completed on 2024-05-28 20:51:14
