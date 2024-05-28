@@ -11,6 +11,16 @@ const courseModel = {
         }
     },
 
+    addSessionalMarks: (ObtainedMarks, SessoinalID) => {
+        try {
+            const result = db.executeQuery(sql.courseSQl.addSessionalMarks, [ObtainedMarks, SessoinalID]);
+            return result;
+        }
+        catch (error) {
+            throw error;
+        }
+    },
+
     // CourseRegistrationID, SessionalName, ObtainedMarks, TotalMarks, Weightage
     addSectionalActivity: async function (courseRegId, name, obtainedMarks, totalMarks, weightage) {
         try {
@@ -20,6 +30,15 @@ const courseModel = {
             throw error;
         }
     },
+    getDetailsOfStudentsInARegCourse: async function (courseOfferingID) {
+        try {
+            const [rows, fields] = await db.executeQuery(sql.courseSQl.getCourseRegIDByCourseOffering, [courseOfferingID]);
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    },
+
 
     getCourseRegIdByCourseOfferingId: async function (courseOfferingID) {
         try {

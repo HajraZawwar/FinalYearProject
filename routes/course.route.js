@@ -21,5 +21,7 @@ router.get('/getAllRegisteredCourses', courseController.getAllRegisteredCourses)
 router.post('/registerCourse', courseController.registerCourse);
 router.post('/addsessional', courseController.addSessionalActivity);
 router.get('/getallSessionalbycourseoffering', courseController.getAllSessionalsByCourseOffering);
+router.get('/getDetailsofStudentsinacourse', courseController.getDetailsOfStudentsInARegCourse);
+router.get('/addsessionalmarks', courseController.addSessionalMarks);
 
 module.exports = router;

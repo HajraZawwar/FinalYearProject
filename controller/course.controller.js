@@ -57,8 +57,52 @@ const courseController = {
         }
     },
 
+    addSessionalMarks: async (req, res) => {
 
+        try {
+            const CourseRegID = req.body.CourseRegID;
+            const SessionalName = req.body.SessionalName;
 
+            const sessional = await courseModel.getSessionalByName(SessionalName, CourseRegID);
+
+            if (sessional.length == 0) {
+                res.status(500).json(config.responseGenerator(true, null, "Sessional does not exist"));
+                return;
+            }
+
+            const SessionalID = sessional[0].SessionalID;
+            const ObtainedMarks = req.body.ObtainedMarks;
+
+            if (ObtainedMarks > sessional[0].TotalMarks) {
+                res.status(500).json(config.responseGenerator(true, null, "Obtained marks cannot be greater than total marks"));
+                return;
+            }
+
+            const result = await courseModel.addSessionalMarks(ObtainedMarks, SessionalID);
+
+            if (result.affectedRows == 0) {
+                res.status(500).json(config.responseGenerator(true, null, "No such sessional exists for this course registration"));
+                return;
+            }
+
+            res.json(config.responseGenerator(false, `Sessional Marks Addded Succuesfully`, ""));
+
+        }
+        catch (error) {
+            // console.log(error)
+            res.status(500).json(config.responseGenerator(true, null, error.message));
+        }
+    },
+    getDetailsOfStudentsInARegCourse: async (req, res) => {
+        try {
+            const CourseOfferingID = req.query.CourseOfferingID;
+            const data = await courseModel.getDetailsOfStudentsInARegCourse(CourseOfferingID);
+            res.json(config.responseGenerator(false, data, ""));
+        }
+        catch (error) {
+            res.status(500).json(config.responseGenerator(true, null, error.message));
+        }
+    },
 
     getAllRegisteredCourses: async (req, res) => {
         try {
@@ -177,6 +221,25 @@ const courseController = {
             const weightage = req.body.Weightage;
 
             const courseRegIds = await courseModel.getCourseRegIdByCourseOfferingId(courseOfferingID);
+
+            const sessionalList = await courseModel.getSessionalsListByCourseOffering(courseOfferingID);
+
+            // check if the sessional already exists
+            let sum = 0;
+            for (let i = 0; i < sessionalList.length; i++) {
+                if (sessionalList[i].SessionalName == sessionalName) {
+                    res.status(500).json(config.responseGenerator(true, null, "Sessional already exists"));
+                    return;
+                }
+
+                sum += sessionalList[i].Weightage;
+            }
+            // If total weigtage exceeds 100
+
+            if (sum + weightage > 100) {
+                res.status(500).json(config.responseGenerator(true, null, "Total weightage exceeds 100"));
+                return;
+            }
 
             if (courseRegIds.length == 0) {
                 res.status(500).json(config.responseGenerator(true, null, "Course is not registered"));

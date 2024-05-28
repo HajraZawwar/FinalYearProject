@@ -44,6 +44,14 @@ const courseSQl = {
     on cr.CourseRegistrationID = cs.CourseRegistrationID
     where cr.CourseOfferingID = ?
     group by SessionalName, cs.Weightage, cs.TotalMarks`,
+    getCourseRegIDofStudentsInACourse:`select distinct (st.StudentID), st.RollNo,st.FirstName, st.LastName, cr.CourseRegistrationID, cr.CourseOfferingID
+    from coursesessionalstable as cs 
+    join courseregistration as cr
+    on cr.CourseRegistrationID = cs.CourseRegistrationID
+    join semesterregistration as sr on sr.SemesterRegistrationID = cr.SemesterRegistrationID
+    join students as st on st.StudentID = sr.StudentID
+    where cr.CourseOfferingID = ?`,
+    addSessionalMarks: 'UPDATE coursesessionalstable SET ObtainedMarks = ? WHERE  SessionalID = ?',
 };
 
 const gradeSQl = {
