@@ -1,6 +1,7 @@
 const db = require('../constants/db');
 const sql = require('../constants/sql');
 const config = require('../constants/config');
+const bycrypt = require('bcrypt');
 
 const loginModel = {
     getAllLogins: async () => {
@@ -12,8 +13,7 @@ const loginModel = {
             return rows;
 
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error;
         }
     },
 
@@ -42,20 +42,23 @@ const loginModel = {
                 return null; // No user found with the given username
             }
         } catch (error) {
-            console.log("Error fetching user by username:", error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error;
         }
     },
 
     //Method to register a new user
     registerUser: async (username, password, role) => {
         try {
-            const [result] = await db.executeQuery(sql.loginSQl.insertUser, [username, password, role]);
+
+
+            // Hash the password before storing it
+            const hashedPassword = await bycrypt.hash(password, 10);
+
+            const [result, fields] = await db.executeQuery(sql.loginSQl.insertUser, [username, hashedPassword, role]);
 
             return result.insertId; // Return the ID of the newly inserted user
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error
         }
     }
 

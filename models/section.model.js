@@ -9,18 +9,23 @@ const sectionModel = {
             const [rows, fields] = await db.executeQuery(sql.sectionSQl.selectAll);
             return rows;
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error;
         }
     },
 
     getSectionByid: async function (SectionID) {
         try {
-            const [rows, fields] = await db.executeQuery(sql.sectionSQl.selectSectionById, [SectionID]);
+            const [rows, fields] = await db.executeQuery(sql.sectionSQl.findSectionById, [SectionID]);
+
+
+            if (rows.length === 0) {
+                return null;
+            }
+
             return rows;
+
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error;
         }
     },
 
@@ -29,8 +34,7 @@ const sectionModel = {
             const result = await db.executeQuery(sql.sectionSQl.addSection, [SectionName]);
             return result;
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error;
         }
     },
 
@@ -39,8 +43,7 @@ const sectionModel = {
             const result = await db.executeQuery(sql.sectionSQl.updateSection, [SectionName, SectionID]);
             return result;
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error;
         }
     },
 
@@ -49,8 +52,7 @@ const sectionModel = {
             const result = await db.executeQuery(sql.sectionSQl.deleteSection, [SectionID]);
             return result;
         } catch (error) {
-            console.log(error);
-            res.json(config.responseGenerator(true, "", error));
+            throw error;
         }
     }
 };

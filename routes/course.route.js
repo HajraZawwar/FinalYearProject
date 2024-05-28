@@ -15,6 +15,18 @@ router.get('/getroadmapbyid', roadmap.getRoadMapById);
 router.get('/getroadmap', roadmap.getAllRoadMaps);
 router.put('/updateroadmap', roadmap.updateRoadMap);
 router.delete('/deleteroadmap', roadmap.deleteRoadMap);
-
-
+router.post('/offerCourse', courseController.offerCourse);
+router.get('/getAllOfferedCourses', courseController.getAllOfferedCourses);
+router.get('/getAllRegisteredCourses', courseController.getAllRegisteredCourses);
+router.post('/registerCourse', courseController.registerCourse);
+router.post('/addsessional', courseController.addSessionalActivity);
+router.get('/getallSessionalbycourseoffering', courseController.getAllSessionalsByCourseOffering);
+router.get('/getDetailsofStudentsinacourse', courseController.getDetailsOfStudentsInARegCourse);
+router.get('/addsessionalmarks', courseController.addSessionalMarks);
+router.get('/getStudentGradebookByCourseRegId', courseController.getStudentGradebookByCourseRegId);
 module.exports = router;
+router.put('/updateMidsTotal', courseController.updateMidsPercentage);
+router.put('/updateFinalTotal', courseController.updateFinalPercentage);
+router.put('/addMidsMarks',courseController.addMidsMarks);
+router.put('/addFinalMarks',courseController.addFinalMarks);
+

@@ -11,9 +11,10 @@ const sectionRoute = require('./routes/section.route.js');
 const batchRoute = require('./routes/batch.route.js');
 const gradeRoute = require('./routes/grade.route.js');
 const sessionRoute = require('./routes/session.route.js');
-
-const adminController = require('./controller/admin.controller.js');
-
+const roleRoute = require('./routes/roles.routes.js');
+const adminRoute = require('./routes/admin.routes.js');
+const facultyRoute = require('./routes/faculty.routes.js'); // This is the route for faculty
+const semesterRoute = require('./routes/semester.route.js'); // This is the route for semester
 
 
 // Middleware to parse JSON bodies
@@ -52,6 +53,14 @@ app.use('/grade',gradeRoute)
 
 // Admin accessing all the sessions
 app.use('/session',sessionRoute)
+
+app.use('/role', roleRoute)
+
+app.use('/admin', adminRoute);
+
+app.use('/faculty', facultyRoute);
+
+app.use('/semester',semesterRoute);
 
 
 app.listen(config.expressPort, () => {
