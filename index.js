@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const config = require('./constants/config.js');
 const auth = require('./middleware/auth.middleware.js');
@@ -16,9 +17,10 @@ const adminRoute = require('./routes/admin.routes.js');
 const facultyRoute = require('./routes/faculty.routes.js'); // This is the route for faculty
 const semesterRoute = require('./routes/semester.route.js'); // This is the route for semester
 
-
+app.use(cors());
 // Middleware to parse JSON bodies
 app.use(express.json());
+
 
 // Middleware to parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));
