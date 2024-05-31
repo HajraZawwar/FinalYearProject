@@ -8,7 +8,7 @@ const gradeController = {
     getAllGrades: async (req, res) => {
         try {
 
-            const [data, fields] = await gradeModel.getAllGrades();
+            const data = await gradeModel.getAllGrades();
             res.json(config.responseGenerator(false, data, ""));
         }
 
@@ -21,7 +21,7 @@ const gradeController = {
     getGradeById: async (req, res) => {
         try {
             const GradeID = req.params.GradeID;
-            const [data, fields] = await gradeModel.getGradeById(GradeID);
+            const data = await gradeModel.getGradeById(GradeID);
             res.json(config.responseGenerator(false, data, ""));
         }
 

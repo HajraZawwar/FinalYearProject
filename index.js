@@ -65,6 +65,7 @@ app.use('/faculty', facultyRoute);
 app.use('/semester',semesterRoute);
 
 
+
 app.listen(config.expressPort, () => {
     console.log("Server is running on port " + config.expressPort);
 });

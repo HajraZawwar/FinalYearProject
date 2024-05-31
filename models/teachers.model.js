@@ -1,7 +1,6 @@
 const db = require('../constants/db.js');
 const config = require('../constants/config.js');
 const sql = require('../constants/sql.js');
-const { getAllSupervisors } = require('../controller/teachers.controller.js');
 
 const teacherModel = {
 
@@ -13,6 +12,15 @@ const teacherModel = {
             throw error;
         }
     },
+    getTeacherByLogin: async function (loginId) {
+        try {
+            const [rows, fields] = await db.executeQuery(sql.teacherSQl.getTeacherByLoginId, [loginId]);
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    },
+
     getSupervisorByDeptID: async function (DepartmentID) {
         try {
             const [rows, fields] = await db.executeQuery(sql.teacherSQl.getSuperVisorByDept, [DepartmentID]);
@@ -23,7 +31,7 @@ const teacherModel = {
     },
     getSupervisorByID: async function (TeacherID) {
         try {
-            cosnt[rows, fields] = await db.executeQuery(sql.teacherSQl.getSupervisorByID, [TeacherID]);
+            const [rows, fields] = await db.executeQuery(sql.teacherSQl.getSupervisorByID, [TeacherID]);
             return rows;
 
         }
@@ -59,9 +67,9 @@ const teacherModel = {
     }
     ,
 
-    updateTeacherLogin: async function () {
+    updateTeacherLogin: async function (login, TeacherID) {
         try {
-            const [rows, fields] = await db.executeQuery(sql.teacherSQl.updateLogin);
+            const [rows, fields] = await db.executeQuery(sql.teacherSQl.updateLogin,[login, TeacherID]);
             return rows;
         }
         catch (error) {

@@ -2,7 +2,7 @@
 
 const loginSQl = {
     selectAll: 'SELECT * FROM login',
-    selectLogin: 'SELECT * FROM login WHERE username = ? AND password = ?',
+    selectLogin: 'SELECT * FROM login WHERE username = ?',
     selectUserByUsername: 'SELECT * FROM login WHERE username = ?',
     insertUser: 'INSERT INTO login (username, password, role) VALUES (?, ?, ?)',
 }
@@ -112,9 +112,10 @@ const statusSQl = {
 };
 
 const studentSQl = {
-    selectAll: 'SELECT * FROM students',
+    selectAll: 'SELECT * FROM students join batch on students.BatchID = batch.BatchID join campus on students.CampusID = campus.CampusID join section on students.SectionID = section.SectionID join department on students.DepartmentID = department.DepartmentID',
     addStudent: 'INSERT INTO students (RollNo, FirstName, LastName, Age, Gender, City, Country, PhoneNo, Address, BatchID, CampusID, SectionID, DepartmentID, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
     updateStudentLogin: 'UPDATE students SET login = ? WHERE StudentID = ?',
+    getStudentByLoginId: 'SELECT * FROM students WHERE login = ?',
     selectSpecificStudents: 'SELECT * FROM students WHERE BatchID = ? AND SectionID = ? AND CampusID = ? AND DepartmentID = ?',
     findBySectionAndBatchAndDegreeAndCampus: 'SELECT * FROM students WHERE SectionID = ? AND BatchID = ? AND DepartmentID = ? AND CampusID = ?',
     findWhereLoginIsNull: 'SELECT * FROM students WHERE login IS NULL',
@@ -176,16 +177,18 @@ const sessionSQl = {
 
 const teacherSQl = {
     nullLogin: `SELECT  * FROM TEACHER WHERE login is NULL`,
-    selectAll: 'SELECT * FROM teachers',
+    selectAll: 'SELECT * FROM teachers join department on teachers.DepartmentID = department.DepartmentID',
     addTeacher: 'INSERT INTO teachers (TeacherCode, FirstName, LastName, Age, Gender, PhoneNo, Email, DepartmentID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-    updateLogin: 'UPDATE students SET login = ? WHERE TeacherID = ?',
+    getTeacherByLoginId: 'SELECT * FROM teachers WHERE login = ?',
+    updateLogin: 'UPDATE teachers SET login = ? WHERE TeacherID = ?',
     findTeacherById: 'SELECT * FROM teachers WHERE TeacherID = ?',
     updateTeacher: 'UPDATE teachers SET TeacherCode = ?, FirstName = ?, LastName = ?, Age = ?, Gender = ?, PhoneNo = ?, Email = ?, DepartmentID = ? WHERE TeacherID = ?',
     getSuperVisorByDept: 'SELECT * FROM teachers WHERE DepartmentID = ?',
-    getAllSupervisors: 'SELECT * FROM supervisor',
+    getAllSupervisors: 'SELECT * FROM supervisor join teachers on supervisor.TeacherID = teachers.TeacherID join department on supervisor.DepartmentID = department.DepartmentID',
     getSupervisorByID: 'SELECT * FROM supervisor WHERE TeacherID = ?',
     addSupervisor: 'INSERT INTO supervisor (TeacherID, DepartmentID) VALUES (?, ?)',
     editSupervisor: 'UPDATE supervisor SET DepartmentID = ? WHERE TeacherID = ?',
+
     deleteTeacher: 'DELETE FROM teachers WHERE TeacherID = ?',
 };
 

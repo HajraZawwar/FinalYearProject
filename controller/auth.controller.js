@@ -1,10 +1,9 @@
-const db = require('./../constants/db.js');
 const config = require('./../constants/config.js');
-const sql = require('../constants/sql.js');
 // const studentController = require('./students.controller.js');
 const studentModel = require('../models/students.model.js');
 const loginModel = require('../models/login.model.js');
 const roleModel = require('../models/roles.model.js');
+const teacherModel = require('../models/teachers.model.js');
 // const authMiddleware = require('../middleware/auth.middleware.js');
 
 const authController = {
@@ -44,10 +43,27 @@ const authController = {
             const teachers = await teacherModel.nullLogin();
             const teacherRoleId = await roleModel.getRoleByName('teacher');
 
-            for (const teacher of teachers) {
-                const insertId = await loginModel.registerUser(teacher.FirstName + '.' + teacher.LastName, "123456789", teacherRoleId[0].roleId);
+            console.log(teachers)
 
-                const updateTeacherLogin = await teacherModel.updateTeacherLogin(teacher.TeacherID, insertId);
+
+
+            // Then enter it into the login table
+            for (const teacher of teachers) {
+
+                let newUserName = teacher.FirstName + '.' + teacher.LastName;
+                let login = await loginModel.getLoginByUserName(newUserName);
+                let i = 1;
+            
+                // Loop until we get a login that does not exist
+                while (login.length != 0) {
+                    newUserName = teacher.FirstName + '.' + teacher.LastName + '' + i;
+                    login = await loginModel.getLoginByUserName(newUserName);
+                    i++;
+                }
+
+                const insertId = await loginModel.registerUser(newUserName, "123456789", teacherRoleId[0].roleId);
+
+                const updateTeacherLogin = await teacherModel.updateTeacherLogin(insertId, teacher.TeacherID);
 
                 if (updateTeacherLogin.affectedRows === 0) {
                     throw new Error('Error updating Teacher login');

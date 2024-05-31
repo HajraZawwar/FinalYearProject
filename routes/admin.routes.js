@@ -4,7 +4,7 @@ const { isAdmin } = require('../middleware/auth.middleware');
 const router = express.Router();
 
 
-router.post('/generateStudentLoginsNULL', adminController.generateLoginNULL);
+router.post('/generateLoginsNULL', adminController.generateLoginNULL);
 
 
 

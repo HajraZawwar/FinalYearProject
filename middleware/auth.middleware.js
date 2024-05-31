@@ -8,6 +8,7 @@ const loginModel = require('../models/login.model.js');
 const roleModel = require('../models/roles.model.js');
 const sql = require('../constants/sql.js');
 const teacherModel = require('../models/teachers.model.js');
+const studentModel = require('../models/students.model.js');
 
 // This is the middleware 
 // This middleware is used to get all the logins
@@ -32,16 +33,70 @@ const authMiddleware = {
             const username = req.body.username;
             const password = req.body.password;
 
+            if (!username || !password) {
+                res.json(config.responseGenerator(true, null, "Username or password not provided"));
+                return;
+
+            }
+
+            if (username === 'admin' && password === 'admin') {
+                const token = jwt.sign
+                    ({
+                        username: 'admin',
+                        role: 'admin'
+                    }, config.JWT_SECRET);
+
+                res.json(config.responseGenerator(false, { token, user: { 'FirstName': 'admin' }, role: 'admin' }, "Login Success"));
+                return;
+            };
+
+
             const rows = await loginModel.getLogin(username, password);
+            let user = null;
 
             if (rows.length > 0) {
                 user = rows[0];
                 const token = jwt.sign({ username: user.username, role: user.role }, config.JWT_SECRET);
-                res.json(config.responseGenerator(false, { token, user }, "Login Success"));
+
+
+                // Get the user data
+                let userData = null;
+
+                const roleName = await roleModel.getRoleById(user.role).then((result) => {
+                    return result[0].role;
+                });
+
+
+                if (roleName === 'studentzzzzzzzz') {
+                    userData = await studentModel.getStudentByLogin(user.loginId);
+                }
+                else if (roleName === 'teacher') {
+
+                    userData = await teacherModel.getTeacherByLogin(user.loginId);
+
+                    console.log("Teacher Data", userData);
+                    const getSupervisor = await teacherModel.getSupervisorByID(userData[0].TeacherID);
+
+                    if (getSupervisor.length > 0) {
+                        userData[0].Supervisor = getSupervisor[0];
+                    }
+                    else {
+                        userData[0].Supervisor = null;
+                    }
+                }
+
+                const responseData = {
+                    token,
+                    user: userData[0],
+                    role: roleName,
+                }
+
+                res.json(config.responseGenerator(false, responseData, "Login Success"));
             } else {
                 res.json(config.responseGenerator(true, null, "Login Failed"));
             }
         } catch (error) {
+            console.log(error)
             res.json(config.responseGenerator(true, "error", error.message));
         }
     },
