@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `fyp` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `fyp`;
 -- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
 --
 -- Host: localhost    Database: fyp
@@ -266,9 +264,10 @@ CREATE TABLE `login` (
   `password` varchar(255) NOT NULL,
   `role` int NOT NULL,
   PRIMARY KEY (`loginId`),
+  UNIQUE KEY `username_UNIQUE` (`username`),
   KEY `role_idx` (`role`),
   CONSTRAINT `role` FOREIGN KEY (`role`) REFERENCES `roles` (`roleId`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -277,7 +276,7 @@ CREATE TABLE `login` (
 
 LOCK TABLES `login` WRITE;
 /*!40000 ALTER TABLE `login` DISABLE KEYS */;
-INSERT INTO `login` VALUES (2,'asad','$2b$10$yv2Da8aYwMxPx1OuhTs8C.pmz92NOpGmNzUdyMyNE0tfTSG6ZLUwq',1),(3,'asad4','$2b$10$v6onFyc03Whi6LbZnCcaLu2KB8bV2GzaNF4STL2bP.ZMuz6G573dS',1),(4,'asad890','$2b$10$Ek0fQmux7AeWj3v.V/c5TOb79ILtmm6aLq3I2OJUqFH1GaAxDeVzm',1),(7,'2024007','$2b$10$Nx1Zcjs6942SuHElB0lu1erJ9d/dBycsxZIsYKuJVk88mbUARZ1Ha',1),(8,'98998898','$2b$10$oC6GhkvxTu.y8axrlLZWrunxIwaOutqSnOAkvGS8MIXtxpj7k9cWi',1),(9,'2024083','$2b$10$HFJrbdzXjTaHGSWjmFgLy.0UWk/YMXnnNGvnilMTTSmAs2i0AokIu',1),(10,'2023A01','$2b$10$6wTYUh3W9Oi.axmaiOzrw./vSqFRazR50o3SCqTbZbMzFeGX7SBcS',1),(11,'202eA01','$2b$10$cu/llKBAemyFvI6GwQRRIet0I879frMbnlFGD/qF4Zrp3AWp.YgNO',1);
+INSERT INTO `login` VALUES (2,'asad','$2b$10$yv2Da8aYwMxPx1OuhTs8C.pmz92NOpGmNzUdyMyNE0tfTSG6ZLUwq',1),(3,'asad4','$2b$10$v6onFyc03Whi6LbZnCcaLu2KB8bV2GzaNF4STL2bP.ZMuz6G573dS',1),(4,'asad890','$2b$10$Ek0fQmux7AeWj3v.V/c5TOb79ILtmm6aLq3I2OJUqFH1GaAxDeVzm',1),(7,'2024007','$2b$10$Nx1Zcjs6942SuHElB0lu1erJ9d/dBycsxZIsYKuJVk88mbUARZ1Ha',1),(8,'98998898','$2b$10$oC6GhkvxTu.y8axrlLZWrunxIwaOutqSnOAkvGS8MIXtxpj7k9cWi',1),(9,'2024083','$2b$10$HFJrbdzXjTaHGSWjmFgLy.0UWk/YMXnnNGvnilMTTSmAs2i0AokIu',1),(10,'2023A01','$2b$10$6wTYUh3W9Oi.axmaiOzrw./vSqFRazR50o3SCqTbZbMzFeGX7SBcS',1),(11,'202eA01','$2b$10$cu/llKBAemyFvI6GwQRRIet0I879frMbnlFGD/qF4Zrp3AWp.YgNO',1),(13,'202eA90','$2b$10$./0R4fg91r43JqLgxXBD1OxCKq8BMSCHfA49X9fiZJ7Gpsn8F/zJm',1),(14,'202eA99','$2b$10$TLm5AQ5B55.NEsnVYx2T1.ryUf6V6oroan1ys6kzAG/8Jx19kom7C',1),(21,'John.Doe','$2b$10$tnqyB/KAn6vMdRnf/k2Ru.nhgbu0xuwqtvBhbfNWR3865NPY/e2fu',2),(22,'John.Doe1','$2b$10$fYmWQ4k0zz7g53jWUBtxsehauef0EoU8hweMnW1pJlbuS3QbDxH9a',2),(23,'John.Doe2','$2b$10$PUOCCunjP1gJDCDpdXIW9.ogVjX1W2sWjm3uUi2b/XVFVBRaEjIXm',2);
 /*!40000 ALTER TABLE `login` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -321,7 +320,7 @@ CREATE TABLE `roles` (
   `roleId` int NOT NULL AUTO_INCREMENT,
   `role` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`roleId`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -330,7 +329,7 @@ CREATE TABLE `roles` (
 
 LOCK TABLES `roles` WRITE;
 /*!40000 ALTER TABLE `roles` DISABLE KEYS */;
-INSERT INTO `roles` VALUES (1,'studentzzzzzzzz'),(2,'teacher');
+INSERT INTO `roles` VALUES (1,'studentzzzzzzzz'),(2,'teacher'),(3,'admin');
 /*!40000 ALTER TABLE `roles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -478,7 +477,7 @@ CREATE TABLE `students` (
   CONSTRAINT `DepartmentID` FOREIGN KEY (`DepartmentID`) REFERENCES `department` (`DepartmentID`),
   CONSTRAINT `login` FOREIGN KEY (`login`) REFERENCES `login` (`loginId`),
   CONSTRAINT `SectionID` FOREIGN KEY (`SectionID`) REFERENCES `section` (`SectionID`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -487,7 +486,7 @@ CREATE TABLE `students` (
 
 LOCK TABLES `students` WRITE;
 /*!40000 ALTER TABLE `students` DISABLE KEYS */;
-INSERT INTO `students` VALUES (6,'2024007','Jhooonnn','Snooww',20,'Male','New York','USA','123-456-7890','123 Main St',1,1,1,1,'active',7),(9,'98998898','John','Doe',20,'Male','New York','USA','123-456-7890','123 Main St',1,1,1,1,'active',8),(10,'2024083','Jhooonnn','Snooww',20,'Male','New York','USA','123-456-7890','123 Main St',1,1,1,1,'active',9),(12,'2023A01','John','Doe',21,'Male','New York','USA','+1234567890','123 Main St, New York, NY 10001',1,2,2,2,'active',10),(13,'202eA01','hhhehehe','Doe',21,'Male','New York','USA','+1234567890','123 Main St, New York, NY 10001',1,2,2,2,'active',11);
+INSERT INTO `students` VALUES (6,'2024007','Jhooonnn','Snooww',20,'Male','New York','USA','123-456-7890','123 Main St',1,1,1,1,'active',7),(9,'98998898','John','Doe',20,'Male','New York','USA','123-456-7890','123 Main St',1,1,1,1,'active',8),(10,'2024083','Jhooonnn','Snooww',20,'Male','New York','USA','123-456-7890','123 Main St',1,1,1,1,'active',9),(12,'2023A01','John','Doe',21,'Male','New York','USA','+1234567890','123 Main St, New York, NY 10001',1,2,2,2,'active',10),(13,'202eA01','hhhehehe','Doe',21,'Male','New York','USA','+1234567890','123 Main St, New York, NY 10001',1,2,2,2,'active',11),(14,'202eA90','asad','nazir',21,'Male','New York','USA','+1234567890','123 Main St, New York, NY 10001',1,2,2,2,'active',13),(15,'202eA99','a','n',21,'Male','New York','USA','+1234567890','123 Main St, New York, NY 10001',1,2,2,2,'active',14);
 /*!40000 ALTER TABLE `students` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -542,7 +541,7 @@ CREATE TABLE `teachers` (
   UNIQUE KEY `TeacherCode_UNIQUE` (`TeacherCode`),
   KEY `DepartmentID` (`DepartmentID`),
   CONSTRAINT `teachers_ibfk_1` FOREIGN KEY (`DepartmentID`) REFERENCES `department` (`DepartmentID`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -551,7 +550,7 @@ CREATE TABLE `teachers` (
 
 LOCK TABLES `teachers` WRITE;
 /*!40000 ALTER TABLE `teachers` DISABLE KEYS */;
-INSERT INTO `teachers` VALUES (1,'TCH123','John','Doe',35,'Male','+1234567890','john.doe@example.com',1,NULL),(3,'TCH126','John','Doe',35,'Male','+1234567890','john.doe@example.com',1,NULL);
+INSERT INTO `teachers` VALUES (1,'TCH123','John','Doe',35,'Male','+1234567890','john.doe@example.com',1,21),(3,'TCH126','John','Doe',35,'Male','+1234567890','john.doe@example.com',1,22),(4,'T12345','John','Doe',40,'Male','555-1234','john.doe@example.com',2,23);
 /*!40000 ALTER TABLE `teachers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -624,4 +623,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-28 20:51:14
+-- Dump completed on 2024-05-31 18:04:33
