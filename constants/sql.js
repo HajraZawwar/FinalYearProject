@@ -184,7 +184,7 @@ const teacherSQl = {
     findTeacherById: 'SELECT * FROM teachers WHERE TeacherID = ?',
     updateTeacher: 'UPDATE teachers SET TeacherCode = ?, FirstName = ?, LastName = ?, Age = ?, Gender = ?, PhoneNo = ?, Email = ?, DepartmentID = ? WHERE TeacherID = ?',
     getSuperVisorByDept: 'SELECT * FROM teachers WHERE DepartmentID = ?',
-    getAllSupervisors: 'SELECT * FROM supervisor',
+    getAllSupervisors: 'SELECT * FROM supervisor join teachers on supervisor.TeacherID = teachers.TeacherID join department on supervisor.DepartmentID = department.DepartmentID',
     getSupervisorByID: 'SELECT * FROM supervisor WHERE TeacherID = ?',
     addSupervisor: 'INSERT INTO supervisor (TeacherID, DepartmentID) VALUES (?, ?)',
     editSupervisor: 'UPDATE supervisor SET DepartmentID = ? WHERE TeacherID = ?',
