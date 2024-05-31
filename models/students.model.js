@@ -13,6 +13,15 @@ const studentModel = {
             throw error;
         }
     },
+    getStudentByLogin: async function (loginId) {
+        try {
+            const [rows, fields] = await db.executeQuery(sql.studentSQl.getStudentByLoginId , [loginId]);
+            return rows;
+        } catch (error) {
+            throw error;
+        }
+    },
+
     getSpecificStudents: async function (BatchID, SectionID, CampusID, DepartmentID) {
         try {
            

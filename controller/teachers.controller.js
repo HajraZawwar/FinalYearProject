@@ -1,6 +1,5 @@
-const db = require('../constants/db.js');
+// Description: It has all the methods for the teachers.
 const config = require('../constants/config.js');
-const sql = require('../constants/sql.js');
 const teacherModel = require('../models/teachers.model.js');
 
 const teacherController = {
@@ -80,6 +79,7 @@ const teacherController = {
         }
 
         catch (error) {
+            console.log(error)
             res.status(500).json(config.responseGenerator(true, null, error.message))
         }
 
